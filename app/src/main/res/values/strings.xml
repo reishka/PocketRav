@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">PocketRav</string>
+
+    <!-- Activity Names -->
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_authorize">Authorize your account</string>
+
+    <!-- Nav Drawer Options -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_notebook">My Notebook</string>
+    <string name="navigation_drawer_stash">My Stash</string>
+    <string name="navigation_drawer_projects">My Projects</string>
+    <string name="navigation_drawer_library">My Library</string>
+    <string name="navigation_drawer_queue">My Queue</string>
+    <string name="navigation_drawer_tools">My Tools</string>
+    <string name="navigation_drawer_handspun">My Handspun</string>
+    <string name="navigation_drawer_favorites">My Favorites</string>
+    <string name="navigation_drawer_friends">My Friends</string>
+    <string name="navigation_drawer_groups_events">My Groups and Events</string>
+    <string name="navigation_drawer_messages">My Messages</string>
+    <string name="navigation_drawer_contribute">My Contributions</string>
+    <string name="navigation_drawer_purchases">My Purchases</string>
+
+    <string name="navigation_drawer_search">Search</string>
+    <string name="navigation_drawer_search_yarn">Search Yarns</string>
+    <string name="navigation_drawer_search_pattern">Search Patterns</string>
+    <string name="navigation_drawer_search_project">Search Projects</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

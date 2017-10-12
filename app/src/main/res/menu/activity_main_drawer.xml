@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/navigation_drawer_notebook">
+        <menu>
+
+        <item
+            android:id="@+id/nav_project"
+            android:title="@string/navigation_drawer_projects" />
+        <item
+            android:id="@+id/nav_handspun"
+            android:title="@string/navigation_drawer_handspun" />
+        <item
+            android:id="@+id/nav_stash"
+            android:title="@string/navigation_drawer_stash" />
+        <item
+            android:id="@+id/nav_queue"
+            android:title="@string/navigation_drawer_queue" />
+        <item
+            android:id="@+id/nav_favorites"
+            android:title="@string/navigation_drawer_favorites" />
+        <item
+            android:id="@+id/nav_friends"
+            android:title="@string/navigation_drawer_friends" />
+        <item
+            android:id="@+id/nav_groups_events"
+            android:title="@string/navigation_drawer_groups_events" />
+        <item
+            android:id="@+id/nav_tools"
+            android:title="@string/navigation_drawer_tools" />
+        <item
+            android:id="@+id/nav_library"
+            android:title="@string/navigation_drawer_library" />
+        <item
+            android:id="@+id/nav_messages"
+            android:title="@string/navigation_drawer_messages" />
+        <item
+            android:id="@+id/nav_contribute"
+            android:title="@string/navigation_drawer_contribute" />
+        <item
+            android:id="@+id/nav_purchases"
+            android:title="@string/navigation_drawer_purchases" />
+
+    </menu>
+    </item>
+
+    <item android:title="@string/navigation_drawer_search">
+        <menu>
+            <item
+                android:id="@+id/nav_search_pattern"
+                android:title="@string/navigation_drawer_search_pattern" />
+            <item
+                android:id="@+id/nav_search_yarn"
+                android:title="@string/navigation_drawer_search_yarn" />
+            <item
+                android:id="@+id/nav_search_project"
+                android:title="@string/navigation_drawer_search_project" />
+        </menu>
+    </item>
+
+</menu>
