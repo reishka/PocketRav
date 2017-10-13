@@ -1,5 +1,6 @@
 package com.whitewhiskerstudios.pocketrav.Activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.os.ResultReceiver;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +19,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.scribejava.core.model.Response;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.squareup.picasso.Picasso;
+import com.whitewhiskerstudios.pocketrav.API.Models.User;
 import com.whitewhiskerstudios.pocketrav.Fragments.CardView;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.R;
@@ -29,10 +42,14 @@ import com.whitewhiskerstudios.pocketrav.API.AccessToken_;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
+import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.json.JSONObject;
 
 
+import de.hdodenhof.circleimageview.CircleImageView;
 
+@EActivity
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -63,6 +80,9 @@ public class MainActivity extends AppCompatActivity
     public static final int NAV_SEARCH_PROJECTS = 15;
 
     private DownloadIntentResultReceiver downloadIntentResultReceiver;
+    private User user = null;
+
+    private static final String TAG = "MainActivity";
 
 
     @Override
@@ -95,8 +115,13 @@ public class MainActivity extends AppCompatActivity
 
         downloadIntentResultReceiver = new DownloadIntentResultReceiver(new Handler());
 
-        getAuthToken();
-        setupUser();
+        String json = prefs.accessToken().get();
+
+        if (json == null || json == "")
+            getAuthToken();
+        else {
+            setupUser();
+        }
         initDrawerIcons();
     }
 
@@ -213,14 +238,41 @@ public class MainActivity extends AppCompatActivity
 
         String json = prefs.accessToken().get();
 
-        if (json == null){
+        if (json == null || json == ""){
             Intent intent = new Intent(this, AccessToken_.class);
-            startActivity(intent);
+            startActivityForResult(intent, Constants.AUTH_INTENT);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == Constants.AUTH_INTENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                setupUser();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(this, "You did not authorize this app to use Ravelry. You are not logged in.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     private void setupUser(){
-        startDownloadIntentService(Constants.FETCH_USER);
+
+        if (user == null)
+            startDownloadIntentService(Constants.FETCH_USER);
+        else {
+
+            // Set up the user info in the menu header
+            CircleImageView userImage = (CircleImageView) findViewById(R.id.nav_header_image);
+            TextView username = (TextView) findViewById(R.id.nav_header_main_username);
+            TextView name = (TextView) findViewById(R.id.nav_header_main_name);
+
+            Picasso.with(this).load(user.getSmallPhotoURL()).into(userImage);
+            username.setText(user.getUsername());
+            name.setText(user.getFirstName());
+        }
+
     }
 
     private void startDownloadIntentService(int type){
@@ -240,6 +292,32 @@ public class MainActivity extends AppCompatActivity
         protected void onReceiveResult(int resultCode, Bundle resultData) {
 
             if (resultCode == Constants.SUCCESS_RESULT){
+
+                int type = resultData.getInt(Constants.FETCH_TYPE);
+                String resultDataString = resultData.getString(Constants.RESULT_DATA_KEY);
+                ObjectMapper mapper = new ObjectMapper();
+
+                switch(type){
+                    case Constants.FETCH_USER:
+
+                        try {
+                            JSONObject jObject = new JSONObject(resultDataString);
+                            String s_user = jObject.get("user").toString();
+                            user = mapper.readValue(s_user, User.class);
+
+                            if (user != null)
+                                setupUser();
+
+                        }catch (Exception e) {
+
+                            user = null;
+                            Log.e(TAG, "Could not get user info from data returned from Ravelry");
+                        }
+
+                        break;
+                    default:
+                        Log.e(TAG, "How did we get here....?");
+                }
             }
         }
     }

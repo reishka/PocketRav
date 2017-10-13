@@ -1,5 +1,6 @@
 package com.whitewhiskerstudios.pocketrav.API;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 import com.google.gson.Gson;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.R;
+import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -107,11 +109,12 @@ public class AccessToken extends AppCompatActivity {
 
                         Gson gson = new Gson();
                         String json_at = gson.toJson(at);
+                        String json_rt = gson.toJson(requestToken);
 
                         prefs.username().put(username);
                         prefs.accessToken().put(json_at);
                         prefs.accessSecret().put(at.getTokenSecret());
-                        prefs.requestToken().put(requestToken.getToken());
+                        prefs.requestToken().put(json_rt);
 
                         return at;
                     }
@@ -120,11 +123,18 @@ public class AccessToken extends AppCompatActivity {
                     @Override
                     protected void onPostExecute(Token accessToken) {
 
-                        if (accessToken != null)
-                        {
-                            finish();
+                        Intent intent = new Intent();
 
+                        if (accessToken != null) {
+                            intent.putExtra(Constants.RESULT_DATA_KEY, prefs.username().get());
+                            setResult(RESULT_OK, intent);
+                        }else {
+                            setResult(RESULT_CANCELED);
                         }
+
+                        finish();
+
+
                     }
                 }).execute();
             } else {

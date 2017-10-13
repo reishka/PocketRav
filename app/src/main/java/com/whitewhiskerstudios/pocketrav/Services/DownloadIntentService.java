@@ -36,7 +36,9 @@ public class DownloadIntentService extends IntentService {
 
     private static final String TAG = "DownloadIntentService";
     private ResultReceiver resultReceiver;
-    private Response response = null;
+
+    private String responseBody = null;
+    int fetchType = -1;
 
     public DownloadIntentService() { super(TAG); }
 
@@ -51,7 +53,7 @@ public class DownloadIntentService extends IntentService {
             return;
         }
 
-        int fetchType = intent.getIntExtra(Constants.FETCH_TYPE, -1);
+        fetchType = intent.getIntExtra(Constants.FETCH_TYPE, -1);
 
         if (fetchType == -1) {
             Log.wtf(TAG, "No fetch type declared. There is no data to fetch. What are you doing here?");
@@ -75,6 +77,8 @@ public class DownloadIntentService extends IntentService {
         switch (fetchType) {
 
             case Constants.FETCH_USER:
+                apiCall = RavelryAPI.instance().getUser(username, accessToken);
+                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
             case Constants.FETCH_PROJECT_LIST:
@@ -89,18 +93,25 @@ public class DownloadIntentService extends IntentService {
         if (apiCall == ""){
             Log.wtf(TAG, "Could not get the API call");
             errorMessage = "Could not create the API call";
-        }else {
+        }else if (oAuthRequest == null) {
+            Log.wtf(TAG, "oAuthRequest could not be created.");
+            errorMessage = "oAuthRequest could not be created.";
+        }else{
 
             // Do the actual work of making the API call
             try {
                 service.signRequest(accessToken, oAuthRequest);
-                Response response = service.execute(oAuthRequest);
-            } catch (Exception e) {}
+                final Response response = service.execute(oAuthRequest);
+                responseBody = response.getBody();
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
 
 
-        if (errorMessage == "") {
-            deliverResultToReceiver(Constants.SUCCESS_RESULT, response);
+        if (errorMessage == "" && responseBody != null) {
+            deliverResultToReceiver(Constants.SUCCESS_RESULT, responseBody);
         }
         else
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
@@ -111,6 +122,7 @@ public class DownloadIntentService extends IntentService {
     {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
+        bundle.putInt(Constants.FETCH_TYPE, fetchType);
         resultReceiver.send(resultCode, bundle);
 
     }

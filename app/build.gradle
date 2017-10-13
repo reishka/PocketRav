@@ -50,5 +50,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'                            // Circular image view
     compile 'com.android.support:cardview-v7:26.0.+'                        // Cardview
     compile 'com.android.support:recyclerview-v7:26.0.+'                    // Recyclerview
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.2'          // Jackson JSON
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'             // Jackson JSON
+    compile 'com.squareup.picasso:picasso:2.5.2'                            // Image Loading
 
 }

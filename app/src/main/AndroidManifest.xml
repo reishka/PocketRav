@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.MainActivity_"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".API.AccessToken_" />
+        <service android:enabled="true" android:name=".Services.DownloadIntentService_" />
+
     </application>
 
 </manifest>
