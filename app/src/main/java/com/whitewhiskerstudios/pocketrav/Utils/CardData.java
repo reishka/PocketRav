@@ -1,5 +1,8 @@
 package com.whitewhiskerstudios.pocketrav.Utils;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * Created by rachael on 10/6/17.
  */

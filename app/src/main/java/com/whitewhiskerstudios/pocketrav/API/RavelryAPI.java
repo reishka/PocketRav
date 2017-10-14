@@ -18,7 +18,7 @@ public class RavelryAPI extends DefaultApi10a {
     private static final String CALLBACK_URL = "x-oauthflow://com.whitewhiskerstudios.pocketrav";
 
     private static final String RAV_API_URL = "https://api.ravelry.com";
-    private static final String OAUTH = "?oauth_token=%s";
+    //private static final String OAUTH = "?oauth_token=%s";
 
     // USER
     private static final String USER = "/people/%s.json";
@@ -61,15 +61,14 @@ public class RavelryAPI extends DefaultApi10a {
         return CALLBACK_URL;
     }
 
-    public String getProjectListRequest(String username, OAuth1AccessToken accessToken){
-        Log.d(TAG, accessToken.toString());
-        return String.format(RAV_API_URL + PROJECT_LIST + OAUTH, username, accessToken.getToken()); }
 
-    public String getUser(String username, OAuth1AccessToken accessToken){
 
-        Log.d(TAG, accessToken.getToken());
-        Log.d(TAG, accessToken.getTokenSecret());
+    public String getProjectListRequest(String username){
 
+        return String.format(RAV_API_URL + PROJECT_LIST, username);
+    }
+
+    public String getUser(String username){
 
         return String.format(RAV_API_URL + USER, username);
     }

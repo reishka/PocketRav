@@ -21,14 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.scribejava.core.model.Response;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -167,12 +160,17 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_project) {
 
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.FETCH_TYPE, Constants.FETCH_PROJECT_LIST);
+
             CardView cardViewFragment = new CardView();
+            cardViewFragment.setArguments(bundle);
 
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frame_layout, cardViewFragment );
             fragmentTransaction.addToBackStack(null);
+
             fragmentTransaction.commit();
 
         } else if (id == R.id.nav_handspun) {
@@ -268,11 +266,13 @@ public class MainActivity extends AppCompatActivity
             TextView username = (TextView) findViewById(R.id.nav_header_main_username);
             TextView name = (TextView) findViewById(R.id.nav_header_main_name);
 
-            Picasso.with(this).load(user.getSmallPhotoURL()).into(userImage);
-            username.setText(user.getUsername());
-            name.setText(user.getFirstName());
+            if (user.getSmallPhotoURL() != null)
+                Picasso.with(this).load(user.getSmallPhotoURL()).into(userImage);
+            if (user.getUsername() != null)
+                username.setText(user.getUsername());
+            if (user.getFirstName() != null)
+                name.setText(user.getFirstName());
         }
-
     }
 
     private void startDownloadIntentService(int type){

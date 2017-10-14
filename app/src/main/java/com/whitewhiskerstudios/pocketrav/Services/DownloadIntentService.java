@@ -77,12 +77,12 @@ public class DownloadIntentService extends IntentService {
         switch (fetchType) {
 
             case Constants.FETCH_USER:
-                apiCall = RavelryAPI.instance().getUser(username, accessToken);
+                apiCall = RavelryAPI.instance().getUser(username);
                 oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
             case Constants.FETCH_PROJECT_LIST:
-                apiCall = RavelryAPI.instance().getProjectListRequest(username, accessToken);
+                apiCall = RavelryAPI.instance().getProjectListRequest(username);
                 oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 

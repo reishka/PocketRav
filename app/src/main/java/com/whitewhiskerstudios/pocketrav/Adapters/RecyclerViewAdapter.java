@@ -1,6 +1,7 @@
 package com.whitewhiskerstudios.pocketrav.Adapters;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Utils.CardData;
 
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataViewHolder> {
 
     private ArrayList<CardData> dataList;
+    private Context context;
 
     public RecyclerViewAdapter(ArrayList<CardData> dl) {
         this.dataList = dl;
@@ -35,6 +38,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CardData cardData = dataList.get(i);
         viewHolder.tv_top.setText(cardData.tv_top);
         viewHolder.tv_bottom.setText(cardData.tv_bottom);
+        
+        if (!cardData.photo.equals(""))
+            Picasso.with(context).load(cardData.photo).into(viewHolder.imageView);
+        else
+            Picasso.with(context).load(R.drawable.placeholder200).into(viewHolder.imageView);
     }
 
     @Override
@@ -43,6 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview, viewGroup, false);
 
+        context = viewGroup.getContext();
         return new DataViewHolder(itemView);
     }
 
@@ -58,8 +67,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_bottom = (TextView) v.findViewById(R.id.tv_bottom);
             imageView = (ImageView) v.findViewById(R.id.photo);
         }
-
     }
-
-
 }
