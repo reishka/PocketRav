@@ -53,5 +53,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.2'          // Jackson JSON
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'             // Jackson JSON
     compile 'com.squareup.picasso:picasso:2.5.2'                            // Image Loading
+    compile 'com.nineoldandroids:library:2.4.0'                             // Slider
+    compile 'com.daimajia.slider:library:1.1.5@aar'                         // Slider
 
 }

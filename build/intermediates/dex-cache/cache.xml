@@ -3,15 +3,6 @@
 
     <item
         is-multidex="false"
-        jar="/home/rachael/.android/build-cache/4908a65c8fed782e059cb80f3c3be409cbc7846c/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.2"
-        sha1="a2af9c72ccaa4c5c049b500ca6ea664a4ce1f7d4">
-        <dex dex="/home/rachael/StudioProjects/PocketRav/app/build/intermediates/pre-dexed/debug/classes_d160abc4a001ac6309da45752f04b6860c4f4713.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/home/rachael/.android/build-cache/541bd19d1851f99bd873887cc58c7730a713dc42/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -27,6 +18,33 @@
         revision="26.0.2"
         sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
         <dex dex="/home/rachael/StudioProjects/PocketRav/app/build/intermediates/pre-dexed/debug/gson-2.7_080a8592a10f7b96d87f698722e2419a65b47844.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/rachael/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/home/rachael/StudioProjects/PocketRav/app/build/intermediates/pre-dexed/debug/library-2.4.0_52c0e86e94c3e819c403e912797919ff90f1333d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/rachael/.android/build-cache/4908a65c8fed782e059cb80f3c3be409cbc7846c/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="a2af9c72ccaa4c5c049b500ca6ea664a4ce1f7d4">
+        <dex dex="/home/rachael/StudioProjects/PocketRav/app/build/intermediates/pre-dexed/debug/classes_d160abc4a001ac6309da45752f04b6860c4f4713.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/rachael/.android/build-cache/9c078a4a71d045b054439037291b7a95fb1f4db0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="08962e03b6a954c65d4944e092879b7f5ee1208d">
+        <dex dex="/home/rachael/StudioProjects/PocketRav/app/build/intermediates/pre-dexed/debug/classes_06b5f2bece5f19c363c8b07b62d7327bc806c868.jar" />
     </item>
 
 </items>
