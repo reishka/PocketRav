@@ -19,6 +19,8 @@ public class Constants {
 
     // Projects
     public static final String PROJECT_ID = "PROJECT ID";
+    public static final String PROJECT_BUNDLE = "PROJECT_BUNDLE";
+    public static final String NOTES_BUNDLE = "NOTES_BUNDLE";
     public static final int FETCH_PROJECT_LIST = 1;
     public static final int FETCH_PROJECT = 2;
 
@@ -27,8 +29,10 @@ public class Constants {
 
     // Patterns
     public static final int FETCH_PATTERN = 5;
+    public static final String PATTERN_ID = "PATTERN_ID";
 
     // Photos
     public static final int FETCH_PHOTOS = 4;
+    public static final String PHOTO_BUNDLE = "PHOTO_BUNDLE";
 
 }

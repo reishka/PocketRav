@@ -86,6 +86,16 @@ public class DownloadIntentService extends IntentService {
                 oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
+            case Constants.FETCH_PROJECT:
+                int projectId = intent.getIntExtra(Constants.PROJECT_ID, -1);
+                if (projectId != -1){
+                    apiCall = RavelryAPI.instance().getProject(username, projectId);
+                    oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
+                }else{
+                    errorMessage = "No project ID.";
+                }
+                break;
+
             default:
                 break;
         }

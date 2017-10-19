@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.whitewhiskerstudios.pocketrav.API.AccessToken_;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapter;
@@ -105,7 +106,7 @@ public class CardView extends Fragment{
 
                             if (projects != null);
                             {
-                                ArrayList<CardData> cardInfoArrayList = new ArrayList<>();
+                                final ArrayList<CardData> cardInfoArrayList = new ArrayList<>();
 
                                 for (int i = 0; i < projects.size() - 1; i++)
                                 {
@@ -130,11 +131,16 @@ public class CardView extends Fragment{
                                 }
 
                                 RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(cardInfoArrayList);
-
                                 recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.MyClickListener(){
                                     @Override
                                     public void onItemClick(int position, View v){
                                         Log.i(TAG, " clicked on item at position: " + position);
+
+                                        int projectId = cardInfoArrayList.get(position).id;
+
+                                        Intent intent = new Intent(getActivity(), ProjectActivity.class);
+                                        intent.putExtra(Constants.PROJECT_ID, projectId);
+                                        startActivity(intent);
                                     }
                                 });
 

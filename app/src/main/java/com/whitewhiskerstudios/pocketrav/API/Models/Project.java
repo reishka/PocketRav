@@ -3,6 +3,7 @@ package com.whitewhiskerstudios.pocketrav.API.Models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Project {
+public class Project implements Serializable{
 
     @JsonProperty("completed")          private String completed;
     @JsonProperty("created_at")         private String createdAt;
@@ -24,7 +25,7 @@ public class Project {
     //@JsonProperty("packs")              private Pack pack;
     @JsonProperty("pattern_id")         private int patternId;
     @JsonProperty("pattern_name")       private String patternName;
-    //@JsonProperty("photos")             private Photo photo;
+    @JsonProperty("photos")             private ArrayList<Photo> photos;
     @JsonProperty("progress")           private int progress;
     @JsonProperty("project_status_id")  private int projectStatusId;
     @JsonProperty("rating")             private int rating;
@@ -111,4 +112,6 @@ public class Project {
 
         return !(this.firstPhoto == null);
     }
+
+    public ArrayList<Photo> getPhotos() { return photos; }
 }
