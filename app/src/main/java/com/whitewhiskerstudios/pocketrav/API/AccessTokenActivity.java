@@ -29,7 +29,7 @@ import static com.whitewhiskerstudios.pocketrav.API.Keys.ACCESS_KEY;
 import static com.whitewhiskerstudios.pocketrav.API.Keys.SECRET_KEY;
 
 @EActivity
-public class AccessToken extends AppCompatActivity {
+public class AccessTokenActivity extends AppCompatActivity {
 
     public static final String EXTRA_USERNAME = "username";
     public static final String EXTRA_REQUEST_TOKEN = "requestToken";

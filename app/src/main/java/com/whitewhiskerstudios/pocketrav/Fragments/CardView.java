@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whitewhiskerstudios.pocketrav.API.AccessToken_;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapter;

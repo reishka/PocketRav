@@ -16,18 +16,28 @@ import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 public class ProjectPattern extends Fragment {
 
     View rootView;
+    Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        bundle = getArguments();
         rootView = inflater.inflate(R.layout.fragment_project_pattern, container, false);
         return rootView;
     }
 
     @Override
-    public void onActivityCreated(Bundle bundle){
-        super.onActivityCreated(bundle);
+    public void onActivityCreated(Bundle acBundle){
+        super.onActivityCreated(acBundle);
+
+
+
+
+
+
+
+
 
     }
 }

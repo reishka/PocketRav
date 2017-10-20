@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Project implements Serializable{
 
     @JsonProperty("completed")          private String completed;
+    @JsonProperty("completed_day_set")  private Boolean completedDaySet;
     @JsonProperty("created_at")         private String createdAt;
     @JsonProperty("favorites_count")    private int favoritesCount;
     @JsonProperty("first_photo")        private Photo firstPhoto;
@@ -38,6 +39,10 @@ public class Project implements Serializable{
 
     public String getCompleted() {
         return completed;
+    }
+
+    public Boolean getCompletedDaySet() {
+        return completedDaySet;
     }
 
     public String getCreatedAt() {

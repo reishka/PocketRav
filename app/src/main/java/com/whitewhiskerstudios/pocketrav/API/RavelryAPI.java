@@ -3,6 +3,7 @@ package com.whitewhiskerstudios.pocketrav.API;
 import android.util.Log;
 
 import com.github.scribejava.core.builder.api.DefaultApi10a;
+import com.github.scribejava.core.builder.api.DefaultApi20;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 
@@ -10,7 +11,7 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
  * Created by rachael on 9/16/17.
  */
 
-public class RavelryAPI extends DefaultApi10a {
+public class RavelryAPI extends DefaultApi10a{
 
     private static final String TAG = "RavelryAPI";
 
@@ -51,6 +52,8 @@ public class RavelryAPI extends DefaultApi10a {
     public String getAccessTokenEndpoint() {
         return "https://www.ravelry.com/oauth/access_token";
     }
+
+
 
     @Override
     public String getAuthorizationUrl(OAuth1RequestToken requestToken) {

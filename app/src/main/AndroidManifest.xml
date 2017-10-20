@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".API.AccessToken_" />
+        <activity android:name=".API.AccessTokenActivity_" />
         <activity android:name=".Activities.ProjectActivity"/>
         <service android:enabled="true" android:name=".Services.DownloadIntentService_" />
 

@@ -17,27 +17,27 @@ import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 public class ProjectNotes extends Fragment {
 
     View rootView;
-    Bundle argsBundle = null;
+    Bundle bundle = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        argsBundle = getArguments();
+        bundle = getArguments();
         rootView = inflater.inflate(R.layout.fragment_project_notes, container, false);
         return rootView;
     }
 
     @Override
-    public void onActivityCreated(Bundle bundle){
-        super.onActivityCreated(bundle);
+    public void onActivityCreated(Bundle acBundle){
+        super.onActivityCreated(acBundle);
 
         TextView tv_notes = (TextView)rootView.findViewById((R.id.fragment_project_notes_notes));
         String notes = "No notes to display";
 
-        if (argsBundle != null) {
-            if (!argsBundle.getString(Constants.NOTES_BUNDLE).equals(""))
-                notes = argsBundle.getString(Constants.NOTES_BUNDLE);
+        if (bundle != null) {
+            if (!bundle.getString(Constants.NOTES_BUNDLE).equals(""))
+                notes = bundle.getString(Constants.NOTES_BUNDLE);
         }
 
         tv_notes.setText(notes);

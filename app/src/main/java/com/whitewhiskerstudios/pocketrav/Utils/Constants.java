@@ -35,4 +35,7 @@ public class Constants {
     public static final int FETCH_PHOTOS = 4;
     public static final String PHOTO_BUNDLE = "PHOTO_BUNDLE";
 
+    // OAUTH
+    public static final String LAST_REFRESH = "LAST_REFRESH";
+
 }
