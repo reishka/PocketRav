@@ -57,8 +57,6 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
 
         downloadIntentResultReceiver = new DownloadIntentResultReceiver(new Handler());
 
-        //setupTabs();
-
         Intent intent = getIntent();
         int projectId = intent.getIntExtra(Constants.PROJECT_ID, -1);
 
@@ -117,6 +115,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
                                 final ActionBar actionBar = getSupportActionBar();
                                 if (actionBar != null)
                                     actionBar.setTitle(project.getName());
+
 
                                 setupSlideshow();
                                 setupProject();

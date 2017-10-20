@@ -16,7 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
-import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapter;
+import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithPicasso;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Utils.CardData;
@@ -129,8 +129,8 @@ public class CardView extends Fragment{
                                     cardInfoArrayList.add(new CardData(name, patternName, photoUrl, id));
                                 }
 
-                                RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(cardInfoArrayList);
-                                recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.MyClickListener(){
+                                RecyclerViewAdapterWithPicasso recyclerViewAdapter = new RecyclerViewAdapterWithPicasso(cardInfoArrayList);
+                                recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithPicasso.MyClickListener(){
                                     @Override
                                     public void onItemClick(int position, View v){
                                         Log.i(TAG, " clicked on item at position: " + position);

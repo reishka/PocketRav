@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/ravelry_pink_dark</item>
+        <item name="colorPrimaryDark">@color/ravelry_pink</item>
+        <item name="colorAccent">@color/ravelry_pink</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -18,19 +18,20 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
-        <item name="android:textColorPrimary">@color/ravelry_pink_dark</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <!-- actionMenuTextColor is the color of the text of action (menu) items  -->
-        <item name="actionMenuTextColor">@color/ravelry_pink_dark</item>
+        <item name="actionMenuTextColor">@color/white</item>
         <!-- Tints the input fields like checkboxes and text fields -->
-        <item name="colorAccent">@color/ravelry_pink_dark</item>
+        <item name="colorAccent">@color/white</item>
         <!-- Applies to views in their normal state. -->
-        <item name="colorControlNormal">@color/ravelry_pink_dark</item>
+        <item name="colorControlNormal">@color/white</item>
         <!-- Applies to views in their activated state (i.e checked or switches) -->
-        <item name="colorControlActivated">@color/ravelry_pink_dark</item>
+        <item name="colorControlActivated">@color/white</item>
         <!-- Applied to framework control highlights (i.e ripples or list selectors) -->
-        <item name="colorControlHighlight">@color/ravelry_pink_dark</item>
-        <item name="android:background">@color/ravelry_green</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:background">@color/ravelry_pink_dark</item>
 
         <!-- Enable these below if you want clicking icons to trigger a ripple effect -->
 

@@ -2,15 +2,24 @@ package com.whitewhiskerstudios.pocketrav.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.joanzapata.iconify.widget.IconTextView;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
+import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithFontAwesome;
 import com.whitewhiskerstudios.pocketrav.R;
+import com.whitewhiskerstudios.pocketrav.Utils.CardData;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
 import java.util.ArrayList;
@@ -21,13 +30,22 @@ import java.util.ArrayList;
 
 public class ProjectInfo extends Fragment {
 
+    private static final String TAG = "Project Info Fragment";
+
     private View rootView;
     private Bundle bundle;
     private Project project = null;
 
     private RatingBar ratingBar;
     private ProgressBar progressBar;
-    private TextView dayStarted, dayCompleted, madeFor, status, tags;
+    private RecyclerView recyclerView;
+
+    private static final int POSITION_DATE_STARTED = 0;
+    private static final int POSITION_DATE_FINISHED = 1;
+    private static final int POSITION_MADE_FOR = 2;
+    private static final int POSITION_STATUS = 3;
+    private static final int POSITION_TAGS = 4;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,24 +68,67 @@ public class ProjectInfo extends Fragment {
             try {
                 ratingBar.setRating(project.getRating());
                 progressBar.setProgress(project.getProgress());
-                dayStarted.setText(project.getStarted());
-                dayCompleted.setText(project.getCompleted());
-                madeFor.setText(project.getMadeFor());
-                status.setText(project.getStatusName());
+
+                final ArrayList<CardData> projectItems = new ArrayList<>();
 
                 ArrayList<String> a_tags = new ArrayList<>();
                 a_tags = project.getTagNames();
                 String s_tags = "";
 
                 for (int i = 0; i < a_tags.size(); i++) {
-                 if (i == a_tags.size() -1)
-                    s_tags += a_tags.get(i);
-                 else
-                     s_tags += a_tags.get(i) + ", ";
+                    if (i == a_tags.size() -1)
+                        s_tags += a_tags.get(i);
+                    else
+                        s_tags += a_tags.get(i) + ", ";
                 }
 
-                tags.setText(s_tags);
 
+                projectItems.add(POSITION_DATE_STARTED, new CardData("Date Started:", project.getStarted(), "{fa-calendar}"));
+                projectItems.add(POSITION_DATE_FINISHED, new CardData("Date Completed:", project.getCompleted(), "{fa-calendar-check-o}"));
+                projectItems.add(POSITION_MADE_FOR, new CardData("Made for: ", project.getMadeFor(), "{fa-user}"));
+                projectItems.add(POSITION_STATUS, new CardData("Status: ", project.getStatusName(), "{fa-list-alt}"));
+                projectItems.add(POSITION_TAGS, new CardData("Tags", s_tags, "{fa-tags}"));
+
+
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+                gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+                    @Override
+                    public int getSpanSize(int position){
+                        if (position == POSITION_TAGS){
+                            return 2;
+                        }else
+                            return 1;
+                    }
+                });
+
+
+                recyclerView.setLayoutManager(gridLayoutManager);
+
+                RecyclerViewAdapterWithFontAwesome recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(projectItems);
+                recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener(){
+                    @Override
+                    public void onItemClick(int position, View v){
+                        Log.i(TAG, " clicked on item at position: " + position);
+
+                        switch(position){
+                            case POSITION_DATE_STARTED:
+                                break;
+                            case POSITION_DATE_FINISHED:
+                                break;
+                            case POSITION_MADE_FOR:
+                                break;
+                            case POSITION_STATUS:
+                                break;
+                            case POSITION_TAGS:
+                                break;
+
+
+                        }
+
+                    }
+                });
+
+                recyclerView.setAdapter(recyclerViewAdapter);
 
 
             } catch (Exception e) {
@@ -79,12 +140,7 @@ public class ProjectInfo extends Fragment {
 
         ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBar);
         progressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
-        dayStarted = (TextView)rootView.findViewById(R.id.dateStartedValue);
-        dayCompleted = (TextView)rootView.findViewById(R.id.dateCompletedValue);
-        madeFor = (TextView)rootView.findViewById(R.id.madeForValue);
-        status = (TextView)rootView.findViewById(R.id.statusValue);
-        tags = (TextView)rootView.findViewById(R.id.tagValue);
-
+        recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
 
     }
 }
