@@ -19,10 +19,11 @@ import java.util.ArrayList;
  * Created by rachael on 10/6/17.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataViewHolder>{
 
     private ArrayList<CardData> dataList;
     private Context context;
+    private static MyClickListener myClickListener;
 
     public RecyclerViewAdapter(ArrayList<CardData> dl) {
         this.dataList = dl;
@@ -38,11 +39,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CardData cardData = dataList.get(i);
         viewHolder.tv_top.setText(cardData.tv_top);
         viewHolder.tv_bottom.setText(cardData.tv_bottom);
-        
+
         if (!cardData.photo.equals(""))
             Picasso.with(context).load(cardData.photo).into(viewHolder.imageView);
         else
             Picasso.with(context).load(R.drawable.placeholder200).into(viewHolder.imageView);
+
     }
 
     @Override
@@ -55,7 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new DataViewHolder(itemView);
     }
 
-    public static class DataViewHolder extends RecyclerView.ViewHolder{
+    public static class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView tv_top;
         protected TextView tv_bottom;
@@ -66,6 +68,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_top = (TextView) v.findViewById(R.id.tv_top);
             tv_bottom = (TextView) v.findViewById(R.id.tv_bottom);
             imageView = (ImageView) v.findViewById(R.id.photo);
+            v.setOnClickListener(this);
         }
+        @Override
+        public void onClick(View v) {
+            myClickListener.onItemClick(getAdapterPosition(), v);
+        }
+    }
+
+    public void setOnItemClickListener(MyClickListener myClickListener) {
+        this.myClickListener = myClickListener;
+    }
+
+    public interface MyClickListener {
+        public void onItemClick(int position, View v);
     }
 }

@@ -31,7 +31,7 @@ import com.whitewhiskerstudios.pocketrav.API.Models.User;
 import com.whitewhiskerstudios.pocketrav.Fragments.CardView;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.R;
-import com.whitewhiskerstudios.pocketrav.API.AccessToken_;
+import com.whitewhiskerstudios.pocketrav.API.AccessTokenActivity_;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity
         String json = prefs.accessToken().get();
 
         if (json == null || json == ""){
-            Intent intent = new Intent(this, AccessToken_.class);
+            Intent intent = new Intent(this, AccessTokenActivity_.class);
             startActivityForResult(intent, Constants.AUTH_INTENT);
         }
     }

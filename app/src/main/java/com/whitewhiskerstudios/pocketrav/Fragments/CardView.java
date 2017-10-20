@@ -15,8 +15,7 @@ import android.view.ViewGroup;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
-import com.whitewhiskerstudios.pocketrav.API.Models.User;
-import com.whitewhiskerstudios.pocketrav.Activities.MainActivity;
+import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapter;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
@@ -69,14 +68,6 @@ public class CardView extends Fragment{
                 break;
 
             default:
-                ArrayList<CardData> cardInfoArrayList = new ArrayList<>();
-                cardInfoArrayList.add(new CardData("texta", "text1", "photo"));
-                cardInfoArrayList.add(new CardData("texdb", "text2", "photo"));
-                cardInfoArrayList.add(new CardData("textc", "text3", "photo"));
-                cardInfoArrayList.add(new CardData("textd", "text4", "photo"));
-
-                RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(cardInfoArrayList);
-                cardList.setAdapter(recyclerViewAdapter);
                 break;
         }
     }
@@ -114,7 +105,7 @@ public class CardView extends Fragment{
 
                             if (projects != null);
                             {
-                                ArrayList<CardData> cardInfoArrayList = new ArrayList<>();
+                                final ArrayList<CardData> cardInfoArrayList = new ArrayList<>();
 
                                 for (int i = 0; i < projects.size() - 1; i++)
                                 {
@@ -122,6 +113,7 @@ public class CardView extends Fragment{
                                     String name = "";
                                     String patternName = "";
                                     String photoUrl = "";
+                                    int id = -1;
 
                                     if (projects.get(i).getName() != null)
                                         name = projects.get(i).getName();
@@ -132,11 +124,28 @@ public class CardView extends Fragment{
                                     if (projects.get(i).hasFirstPhoto())
                                         photoUrl = projects.get(i).getFirstPhoto().getSmallUrl();
 
-                                    cardInfoArrayList.add(new CardData(name, patternName, photoUrl));
+                                    id = projects.get(i).getId();
+
+                                    cardInfoArrayList.add(new CardData(name, patternName, photoUrl, id));
                                 }
 
                                 RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(cardInfoArrayList);
+                                recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.MyClickListener(){
+                                    @Override
+                                    public void onItemClick(int position, View v){
+                                        Log.i(TAG, " clicked on item at position: " + position);
+
+                                        int projectId = cardInfoArrayList.get(position).id;
+
+                                        Intent intent = new Intent(getActivity(), ProjectActivity.class);
+                                        intent.putExtra(Constants.PROJECT_ID, projectId);
+                                        startActivity(intent);
+                                    }
+                                });
+
                                 cardList.setAdapter(recyclerViewAdapter);
+
+
                             }
 
 

@@ -3,12 +3,14 @@ package com.whitewhiskerstudios.pocketrav.API.Models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by rachael on 10/13/17.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Photo {
+public class Photo implements Serializable{
 
     @JsonProperty("caption")            private String caption;
     @JsonProperty("copyright_holder")   private String copyrightHolder;
