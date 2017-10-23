@@ -22,8 +22,9 @@ public class Project implements Serializable{
     @JsonProperty("made_for")           private String madeFor;
     @JsonProperty("made_for_user_id")   private int madeForUserId;
     @JsonProperty("name")               private String name;
+    @JsonProperty("needle_sizes")       private ArrayList<NeedleSize> needleSizes;
     @JsonProperty("notes")              private String notes;
-    //@JsonProperty("packs")              private Pack pack;
+    @JsonProperty("packs")              private ArrayList<Pack> pack;
     @JsonProperty("pattern_id")         private int patternId;
     @JsonProperty("pattern_name")       private String patternName;
     @JsonProperty("photos")             private ArrayList<Photo> photos;
@@ -119,4 +120,12 @@ public class Project implements Serializable{
     }
 
     public ArrayList<Photo> getPhotos() { return photos; }
+
+    public ArrayList<Pack> getPack() {
+        return pack;
+    }
+
+    public ArrayList<NeedleSize> getNeedleSizes() {
+        return needleSizes;
+    }
 }

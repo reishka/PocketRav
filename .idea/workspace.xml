@@ -11,24 +11,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a2a294af-b96f-4bb7-b85c-51ec9dfd1258" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/RecyclerViewAdapterWithFontAwesome.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cardview_with_icontextview.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/RecyclerViewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/RecyclerViewAdapterWithPicasso.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/cardview.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cardview_with_imageview.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/FiberType.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/NeedleSize.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Pack.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Yarn.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnCompany.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnFiber.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnWeight.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Activities/ProjectActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Activities/ProjectActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/CardView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/CardView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/RavelryAPI.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/RavelryAPI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectInfo.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Utils/CardData.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Utils/CardData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_projects.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_projects.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_project_info.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_project_info.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/recycler_view.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/recycler_view.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
     </list>
     <ignored path="PocketRav.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,38 +60,54 @@
       <file leaf-file-name="ProjectInfo.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="85" column="126" selection-start-line="85" selection-start-column="126" selection-end-line="85" selection-end-column="126" />
+            <state relative-caret-position="305">
+              <caret line="116" column="85" selection-start-line="116" selection-start-column="85" selection-end-line="116" selection-end-column="85" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3454#3783#0" expanded="true" />
-                <element signature="e#3782#3783#0" expanded="true" />
-                <element signature="e#4041#4846#0" expanded="true" />
-                <element signature="e#4845#4846#0" expanded="true" />
+                <element signature="e#4912#5579#0" expanded="true" />
+                <element signature="e#5578#5579#0" expanded="true" />
+                <element signature="e#5837#6642#0" expanded="true" />
+                <element signature="e#6641#6642#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RecyclerViewAdapterWithFontAwesome.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/RecyclerViewAdapterWithFontAwesome.java">
+      <file leaf-file-name="Project.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+            <state relative-caret-position="393">
+              <caret line="127" column="51" selection-start-line="127" selection-start-column="51" selection-end-line="127" selection-end-column="51" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2253#2254#0" expanded="true" />
+                <element signature="e#3426#3427#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CardView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/CardView.java">
+      <file leaf-file-name="NeedleSize.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/NeedleSize.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-18">
-              <caret line="107" column="69" selection-start-line="107" selection-start-column="69" selection-end-line="107" selection-end-column="69" />
-              <folding />
+            <state relative-caret-position="306">
+              <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#472#473#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pack.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Pack.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="376">
+              <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1972#1973#0" expanded="true" />
+                <element signature="e#2003#2004#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -2034,11 +2047,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/OtherActivities/MainActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/OtherActivities/ProjectActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Interfaces/RavPreferences.java" />
-        <option value="$PROJECT_DIR$/app/src/main/gen/com/whitewhiskerstudios/fiberrav/R.java" />
-        <option value="$PROJECT_DIR$/app/src/main/gen/com/whitewhiskerstudios/fiberrav/BuildConfig.java" />
         <option value="$PROJECT_DIR$/app/src/main/gen/com/whitewhiskerstudios/fiberrav/Manifest.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/RecyclerView.java" />
@@ -2059,12 +2067,10 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_project_notes.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Utils/Constants.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/AccessTokenActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/RavelryAPI.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectNotes.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectPattern.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Activities/MainActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java" />
         <option value="$PROJECT_DIR$/app/build/generated/source/r/debug/com/whitewhiskerstudios/pocketrav/R.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/GridAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Utils/CardData.java" />
@@ -2082,13 +2088,22 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_projects.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/app_bar_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnCompany.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnFiber.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnWeight.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Yarn.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Pack.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/FiberType.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/RavelryAPI.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/NeedleSize.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectInfo.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="27" />
-    <option name="width" value="1920" />
+    <option name="width" value="1551" />
     <option name="height" value="1053" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -2116,9 +2131,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane />
-      </pane>
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -2135,86 +2147,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PocketRav" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PocketRav" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="menu" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PocketRav" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PocketRav" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pocketrav" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Utils" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2275,7 +2207,7 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Adapters" />
+              <option name="myItemId" value="API" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2297,25 +2229,22 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Activities" />
+              <option name="myItemId" value="API" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="PocketRav" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+              <option name="myItemId" value="Models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane />
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2709,11 +2638,18 @@
       <option name="project" value="LOCAL" />
       <updated>1508477570382</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Revised layout for project info fragment. Onclick project info fragment skeleton.">
+      <created>1508535878413</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1508535878413</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <frame x="0" y="27" width="1551" height="1053" extended-state="4" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2723,16 +2659,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960895" sideWeight="0.50213903" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37152392" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14407684" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925472" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963374" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32852387" sideWeight="0.51069516" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23105656" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Assistant" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18576196" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2026578" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2743,8 +2676,11 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Assistant" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14407684" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18576196" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2816,7 +2752,8 @@
     <MESSAGE value="Beginning project display" />
     <MESSAGE value="Placeholder image file" />
     <MESSAGE value="Project Fragment Info and Layout file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Project Fragment Info and Layout file" />
+    <MESSAGE value="Revised layout for project info fragment. Onclick project info fragment skeleton." />
+    <option name="LAST_COMMIT_MESSAGE" value="Revised layout for project info fragment. Onclick project info fragment skeleton." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2845,62 +2782,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="6" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/side_nav_bar.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build/generated/source/apt/debug/com/whitewhiskerstudios/pocketrav/Activities/MainActivity_.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Android/Sdk/sources/android-26/android/app/IntentService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Android/Sdk/sources/android-26/android/os/HandlerThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Keys.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Interfaces/PocketRavPrefs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Android/Sdk/sources/android-26/android/os/Looper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Android/Sdk/sources/android-26/android/os/Handler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
@@ -2933,7 +2814,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2984,10 +2864,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-141">
           <caret line="12" column="42" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
-          <folding>
-            <element signature="e#980#981#0" expanded="false" />
-            <element signature="e#1010#1011#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2995,7 +2871,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
           <caret line="6679" column="0" selection-start-line="6679" selection-start-column="0" selection-end-line="6679" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3003,7 +2878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
           <caret line="1333" column="0" selection-start-line="1333" selection-start-column="0" selection-end-line="1333" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3018,17 +2892,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/RavelryAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
-          <folding>
-            <element signature="e#1691#1692#0" expanded="false" />
-            <element signature="e#1726#1727#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Utils/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -3037,14 +2900,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build/generated/source/apt/debug/com/whitewhiskerstudios/pocketrav/API/AccessToken_Activity_.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/apt/debug/com/whitewhiskerstudios/pocketrav/API/AccessToken_Activity_.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -3094,14 +2950,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="23" column="60" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/ViewPagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -3115,7 +2963,7 @@
         <state relative-caret-position="-1143">
           <caret line="240" column="64" selection-start-line="240" selection-start-column="64" selection-end-line="240" selection-end-column="64" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
             <element signature="method#onBackPressed#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
             <element signature="e#5299#5357#0" expanded="false" />
@@ -3139,14 +2987,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/GridAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="56" column="75" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/GridAdapter.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/cardview_with_imageview.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -3173,7 +3014,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="358">
           <caret line="2248" column="0" selection-start-line="2248" selection-start-column="0" selection-end-line="2248" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3272,7 +3112,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Adapters/RecyclerViewAdapterWithFontAwesome.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
+        <state relative-caret-position="1071">
           <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -3291,22 +3131,167 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/CardView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18">
+        <state relative-caret-position="1377">
           <caret line="107" column="69" selection-start-line="107" selection-start-column="69" selection-end-line="107" selection-end-column="69" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectInfo.java">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.joanzapata.iconify/android-iconify/2.2.2/cd1d2194a780c80dd0ea6a47fec5874390895c9d/android-iconify-2.2.2-sources.jar!/com/joanzapata/iconify/internal/ParsingUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="85" column="126" selection-start-line="85" selection-start-column="126" selection-end-line="85" selection-end-column="126" />
+        <state relative-caret-position="331">
+          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/FiberType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3454#3783#0" expanded="true" />
-            <element signature="e#3782#3783#0" expanded="true" />
-            <element signature="e#4041#4846#0" expanded="true" />
-            <element signature="e#4845#4846#0" expanded="true" />
+            <element signature="e#707#708#0" expanded="true" />
+            <element signature="e#741#742#0" expanded="true" />
+            <element signature="e#767#768#0" expanded="true" />
+            <element signature="e#792#793#0" expanded="true" />
+            <element signature="e#823#824#0" expanded="true" />
+            <element signature="e#850#851#0" expanded="true" />
+            <element signature="e#887#888#0" expanded="true" />
+            <element signature="e#919#920#0" expanded="true" />
+            <element signature="e#961#962#0" expanded="true" />
+            <element signature="e#998#999#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Pack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1972#1973#0" expanded="true" />
+            <element signature="e#2003#2004#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Yarn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="39" column="10" selection-start-line="39" selection-start-column="10" selection-end-line="39" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1933#1934#0" expanded="true" />
+            <element signature="e#1968#1969#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnWeight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#938#939#0" expanded="true" />
+            <element signature="e#964#965#0" expanded="true" />
+            <element signature="e#989#990#0" expanded="true" />
+            <element signature="e#1025#1026#0" expanded="true" />
+            <element signature="e#1057#1058#0" expanded="true" />
+            <element signature="e#1092#1093#0" expanded="true" />
+            <element signature="e#1123#1124#0" expanded="true" />
+            <element signature="e#1158#1159#0" expanded="true" />
+            <element signature="e#1189#1190#0" expanded="true" />
+            <element signature="e#1220#1221#0" expanded="true" />
+            <element signature="e#1247#1248#0" expanded="true" />
+            <element signature="e#1277#1278#0" expanded="true" />
+            <element signature="e#1303#1304#0" expanded="true" />
+            <element signature="e#1330#1331#0" expanded="true" />
+            <element signature="e#1356#1357#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnFiber.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1">
+          <caret line="20" column="37" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#611#612#0" expanded="true" />
+            <element signature="e#664#665#0" expanded="true" />
+            <element signature="e#706#707#0" expanded="true" />
+            <element signature="e#732#733#0" expanded="true" />
+            <element signature="e#757#758#0" expanded="true" />
+            <element signature="e#790#791#0" expanded="true" />
+            <element signature="e#818#819#0" expanded="true" />
+            <element signature="e#852#853#0" expanded="true" />
+            <element signature="e#885#886#0" expanded="true" />
+            <element signature="e#934#935#0" expanded="true" />
+            <element signature="e#978#979#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/YarnCompany.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#606#607#0" expanded="true" />
+            <element signature="e#631#632#0" expanded="true" />
+            <element signature="e#665#666#0" expanded="true" />
+            <element signature="e#695#696#0" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#753#754#0" expanded="true" />
+            <element signature="e#787#788#0" expanded="true" />
+            <element signature="e#820#821#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/RavelryAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="72" column="44" selection-start-line="72" selection-start-column="44" selection-end-line="72" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/NeedleSize.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#472#473#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/API/Models/Project.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="127" column="51" selection-start-line="127" selection-start-column="51" selection-end-line="127" selection-end-column="51" />
+          <folding>
+            <element signature="e#3426#3427#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/whitewhiskerstudios/pocketrav/Fragments/ProjectInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="116" column="85" selection-start-line="116" selection-start-column="85" selection-end-line="116" selection-end-column="85" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4912#5579#0" expanded="true" />
+            <element signature="e#5578#5579#0" expanded="true" />
+            <element signature="e#5837#6642#0" expanded="true" />
+            <element signature="e#6641#6642#0" expanded="true" />
           </folding>
         </state>
       </provider>

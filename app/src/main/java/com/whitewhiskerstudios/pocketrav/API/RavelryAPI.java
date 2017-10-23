@@ -73,6 +73,7 @@ public class RavelryAPI extends DefaultApi10a{
         return String.format(RAV_API_URL + USER, username); }
 
     public String getProject(String username, int projectId){
+        Log.d(TAG, String.valueOf(projectId));
         return String.format(RAV_API_URL + PROJECT, username, projectId); }
 
 }
