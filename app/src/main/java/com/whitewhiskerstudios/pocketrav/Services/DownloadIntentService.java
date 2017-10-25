@@ -78,24 +78,28 @@ public class DownloadIntentService extends IntentService {
 
             case Constants.FETCH_USER:
                 apiCall = RavelryAPI.instance().getUser(username);
-                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
             case Constants.FETCH_PROJECT_LIST:
                 apiCall = RavelryAPI.instance().getProjectListRequest(username);
-                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
             case Constants.FETCH_PROJECT:
                 int projectId = intent.getIntExtra(Constants.PROJECT_ID, -1);
                 if (projectId != -1){
                     apiCall = RavelryAPI.instance().getProject(username, projectId);
-                    oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
+
                 }else{
                     errorMessage = "No project ID.";
                 }
                 break;
 
+            case Constants.FETCH_NEEDLES_KNITTING:
+                apiCall = RavelryAPI.instance().getNeedleSizesKnitting();
+                break;
+
+            case Constants.FETCH_NEEDLES_CROCHET:
+                apiCall = RavelryAPI.instance().getNeedleSizesCrochet();
             default:
                 break;
         }
@@ -103,13 +107,11 @@ public class DownloadIntentService extends IntentService {
         if (apiCall == ""){
             Log.wtf(TAG, "Could not get the API call");
             errorMessage = "Could not create the API call";
-        }else if (oAuthRequest == null) {
-            Log.wtf(TAG, "oAuthRequest could not be created.");
-            errorMessage = "oAuthRequest could not be created.";
         }else{
 
             // Do the actual work of making the API call
             try {
+                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 service.signRequest(accessToken, oAuthRequest);
                 final Response response = service.execute(oAuthRequest);
                 responseBody = response.getBody();
@@ -125,7 +127,6 @@ public class DownloadIntentService extends IntentService {
         }
         else
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
-
     }
 
     void deliverResultToReceiver(int resultCode, String message)
@@ -136,17 +137,4 @@ public class DownloadIntentService extends IntentService {
         resultReceiver.send(resultCode, bundle);
 
     }
-
-    void deliverResultToReceiver(int resultCode, Response response)
-    {
-        Gson gson = new Gson();
-        String json_response = gson.toJson(response);
-
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, json_response);
-        resultReceiver.send(resultCode, bundle);
-
-    }
-
-
 }

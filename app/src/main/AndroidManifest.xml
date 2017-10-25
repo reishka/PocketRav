@@ -21,8 +21,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".API.AccessTokenActivity_" />
-        <activity android:name=".Activities.ProjectActivity"/>
+        <activity android:name=".Activities.ProjectActivity_"/>
         <service android:enabled="true" android:name=".Services.DownloadIntentService_" />
+        <service android:enabled="true" android:name=".Services.UploadIntentService_" />
 
     </application>
 

@@ -23,23 +23,29 @@ import com.whitewhiskerstudios.pocketrav.Adapters.ViewPagerAdapter;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectInfo;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectNotes;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectPattern;
+import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.json.JSONObject;
 
 
 /**
  * Created by rachael on 9/17/17.
  */
-
+@EActivity
 public class ProjectActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener{
 
+    @Pref
+    PocketRavPrefs_ prefs;
+
     private DownloadIntentResultReceiver downloadIntentResultReceiver;
     private static final String TAG = "ProjectActivity";
-    private Project project;
+    public Project project;
     private SliderLayout slider;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -116,7 +122,6 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
                                 if (actionBar != null)
                                     actionBar.setTitle(project.getName());
 
-
                                 setupSlideshow();
                                 setupProject();
                                 setupPattern();
@@ -127,7 +132,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
                         }catch (Exception e) {
 
                             project = null;
-                            Log.e(TAG, "Could not get project info from data returned from Ravelry");
+                            Log.e(TAG, e.toString());
                         }
 
                         break;

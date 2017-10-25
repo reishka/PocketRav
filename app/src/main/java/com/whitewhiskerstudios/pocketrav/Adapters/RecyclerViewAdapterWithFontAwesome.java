@@ -76,4 +76,12 @@ public class RecyclerViewAdapterWithFontAwesome extends RecyclerView.Adapter<Rec
     public interface MyClickListener {
         public void onItemClick(int position, View v);
     }
+
+    public void updateList(ArrayList<CardData> list){
+        if (list != null && list.size() > 0){
+            dataList.clear();
+            dataList.addAll(list);
+            notifyDataSetChanged();
+        }
+    }
 }

@@ -5,16 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * Created by rachael on 10/13/17.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Project implements Serializable{
+public class Project extends Observable implements Serializable{
 
     @JsonProperty("completed")          private String completed;
     @JsonProperty("completed_day_set")  private Boolean completedDaySet;
+    @JsonProperty("craft_name")         private String craftName;
     @JsonProperty("created_at")         private String createdAt;
     @JsonProperty("favorites_count")    private int favoritesCount;
     @JsonProperty("first_photo")        private Photo firstPhoto;
@@ -22,7 +24,7 @@ public class Project implements Serializable{
     @JsonProperty("made_for")           private String madeFor;
     @JsonProperty("made_for_user_id")   private int madeForUserId;
     @JsonProperty("name")               private String name;
-    @JsonProperty("needle_sizes")       private ArrayList<NeedleSize> needleSizes;
+    @JsonProperty("needle_sizes")       private ArrayList<NeedleSizes> needleSizes;
     @JsonProperty("notes")              private String notes;
     @JsonProperty("packs")              private ArrayList<Pack> pack;
     @JsonProperty("pattern_id")         private int patternId;
@@ -46,6 +48,8 @@ public class Project implements Serializable{
         return completedDaySet;
     }
 
+    public String getCraftName(){ return craftName; }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -62,7 +66,7 @@ public class Project implements Serializable{
         return id;
     }
 
-    public String getMadeFor() {
+    public synchronized String getMadeFor() {
         return madeFor;
     }
 
@@ -125,7 +129,15 @@ public class Project implements Serializable{
         return pack;
     }
 
-    public ArrayList<NeedleSize> getNeedleSizes() {
+    public ArrayList<NeedleSizes> getNeedleSizes() {
         return needleSizes;
+    }
+
+    public void setMadeFor(String madeFor) {
+        synchronized (this){
+        this.madeFor = madeFor;}
+
+        setChanged();
+        notifyObservers();
     }
 }

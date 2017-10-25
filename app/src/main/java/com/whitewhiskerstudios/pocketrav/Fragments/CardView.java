@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
+import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity_;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithPicasso;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
@@ -137,7 +138,7 @@ public class CardView extends Fragment{
 
                                         int projectId = cardInfoArrayList.get(position).id;
 
-                                        Intent intent = new Intent(getActivity(), ProjectActivity.class);
+                                        Intent intent = new Intent(getActivity(), ProjectActivity_.class);
                                         intent.putExtra(Constants.PROJECT_ID, projectId);
                                         startActivity(intent);
                                     }
