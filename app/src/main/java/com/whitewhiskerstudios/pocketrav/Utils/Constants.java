@@ -43,4 +43,7 @@ public class Constants {
     public static final int FETCH_NEEDLES_KNITTING = 7;
     public static final int FETCH_NEEDLES_CROCHET = 8;
 
+    // Stash
+    public static final int FETCH_STASH_LIST = 9;
+    public static final String STASH_SORT_ORDER = "STASH_SORT_ORDER";
 }

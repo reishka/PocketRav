@@ -213,6 +213,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
 
         Bundle bundle = new Bundle();
         bundle.putString(Constants.NOTES_BUNDLE, project.getNotes());
+        bundle.putInt(Constants.PROJECT_ID, project.getId());
         projectNotesFragment.setArguments(bundle);
     }
 

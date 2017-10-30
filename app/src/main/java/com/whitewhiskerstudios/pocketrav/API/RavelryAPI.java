@@ -40,6 +40,15 @@ public class RavelryAPI extends DefaultApi10a {
     private static final String NEEDLE_SIZES_KNITTING = "/needles/sizes.json?craft=knitting";
     private static final String NEEDLE_SIZES_CROCHET = "/needles/sizes.json?craft=crochet";
 
+    // STASHES
+    public static final String STASH_SORT_ORDER_RECENT = "recent";
+    public static final String STASH_SORT_ORDER_ALPHA = "alpha";
+    public static final String STASH_SORT_ORDER_WEIGHT = "weight";
+    public static final String STASH_SORT_ORDER_COLORFAMILY = "colorfamily";
+    public static final String STASH_SORT_ORDER_YARDS = "yards";
+    private static final String STASH_LIST = "/people/%s/stash/list.json";
+    private static final String STASH_LIST_SORTED = STASH_LIST + "?sort=%s";
+
 
     protected RavelryAPI() {
     }
@@ -87,13 +96,19 @@ public class RavelryAPI extends DefaultApi10a {
         return String.format(RAV_API_URL + PROJECT, username, projectId);
     }
 
-
     public String getNeedleSizesKnitting() {
         return RAV_API_URL + NEEDLE_SIZES_KNITTING;
     }
 
     public String getNeedleSizesCrochet(){
         return RAV_API_URL + NEEDLE_SIZES_CROCHET;
+    }
+
+    public String getStashList(String username){
+        return String.format(RAV_API_URL + STASH_LIST, username);
+    }
+    public String getStashList(String username, String sort){
+        return String.format(RAV_API_URL + STASH_LIST_SORTED, username, sort);
     }
 }
 

@@ -177,6 +177,19 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_stash) {
 
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.FETCH_TYPE, Constants.FETCH_STASH_LIST);
+
+            CardView cardViewFragment = new CardView();
+            cardViewFragment.setArguments(bundle);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.frame_layout, cardViewFragment );
+            fragmentTransaction.addToBackStack(null);
+
+            fragmentTransaction.commit();
+
         } else if (id == R.id.nav_queue) {
 
         } else if (id == R.id.nav_favorites) {

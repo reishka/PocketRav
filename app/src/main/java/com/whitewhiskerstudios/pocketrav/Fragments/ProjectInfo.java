@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.ResultReceiver;
 import android.support.v7.app.AlertDialog;
@@ -16,13 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.whitewhiskerstudios.pocketrav.API.Models.NeedleSizes;
 import com.whitewhiskerstudios.pocketrav.API.Models.Pack;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
@@ -33,7 +37,9 @@ import com.whitewhiskerstudios.pocketrav.Services.UploadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Utils.CardData;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -50,7 +56,7 @@ public class ProjectInfo extends Fragment{
     private Project project = null;
 
     private RatingBar ratingBar;
-    private ProgressBar progressBar;
+    private DiscreteSeekBar seekBar;
     private RecyclerView recyclerView;
     RecyclerViewAdapterWithFontAwesome recyclerViewAdapter;
     ArrayList<CardData> projectItems;
@@ -82,6 +88,7 @@ public class ProjectInfo extends Fragment{
     public void onActivityCreated(Bundle acBundle) {
         super.onActivityCreated(acBundle);
 
+        Iconify.with(new FontAwesomeModule());
 
         uploadIntentResultReceiver = new UploadIntentResultReceiver(new Handler());
         downloadIntentResultReceiver = new DownloadIntentResultReceiver(new Handler());
@@ -96,7 +103,6 @@ public class ProjectInfo extends Fragment{
             loadData();
 
             try {
-
 
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
                 gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
@@ -127,8 +133,8 @@ public class ProjectInfo extends Fragment{
                 });
 
                 recyclerView.setAdapter(recyclerViewAdapter);
-
             } catch (Exception e) {
+                Log.d(TAG, e.toString());
             }
         }
     }
@@ -136,10 +142,49 @@ public class ProjectInfo extends Fragment{
     private void initViews(){
 
         ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBar);
-        progressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
-        recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
-        recyclerView.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 
+                if(rating - 1 != project.getRating()) {
+
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("rating", rating - 1);
+                    startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+                }
+            }
+        });
+
+        seekBar = (DiscreteSeekBar)rootView.findViewById(R.id.seekBar);
+
+        seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+
+            int progressValue = 0;
+            @Override
+            public void onProgressChanged(DiscreteSeekBar seekBar, int progress, boolean fromUser) {
+                progressValue = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+
+                if (progressValue != project.getProgress()) {
+
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("progress", progressValue);
+                    startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+                }
+            }
+        });
+
+        recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
+        LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
+        recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
     }
 
     private String getTags(){
@@ -160,6 +205,7 @@ public class ProjectInfo extends Fragment{
     private void buildDialog(int position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         final EditText et_input = new EditText(getActivity());
         final DatePicker picker  = new DatePicker(getActivity());
         picker.setCalendarViewShown(false);
@@ -182,6 +228,7 @@ public class ProjectInfo extends Fragment{
 
                         jsonObject.addProperty("started", date);
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+
                         dialog.dismiss();
                     }
                 });
@@ -204,6 +251,7 @@ public class ProjectInfo extends Fragment{
 
                         jsonObject.addProperty("completed", date);
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+
                         dialog.dismiss();
                     }
                 });
@@ -219,10 +267,10 @@ public class ProjectInfo extends Fragment{
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("made_for", et_input.getText().toString());
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+
                         dialog.dismiss();
                     }
                 });
-
                 break;
 
             case POSITION_STATUS:
@@ -260,8 +308,8 @@ public class ProjectInfo extends Fragment{
                         jsonObject.addProperty("project_status_id", String.valueOf(i_status));
                         jsonObject.addProperty("status_name", s_status);
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
-                        dialog.dismiss();
 
+                        dialog.dismiss();
                     }
                 });
 
@@ -277,9 +325,7 @@ public class ProjectInfo extends Fragment{
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         JsonObject jsonObject = new JsonObject();
-
                         String tags = et_input.getText().toString();
-
                         String[] a_tags = null;
                         JsonArray jsonArray = new JsonArray();
 
@@ -299,14 +345,11 @@ public class ProjectInfo extends Fragment{
                                 jsonArray.add(tag);
                         }
                             jsonObject.add("tag_names", jsonArray);
-
-                            //jsonObject.addProperty("tag_names", jsonArray);
                             startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
                     }
                 });
-
                 break;
 
             case POSITION_SIZE:
@@ -319,17 +362,17 @@ public class ProjectInfo extends Fragment{
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("size", et_input.getText().toString());
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+
                         dialog.dismiss();
                     }
                 });
-
                 break;
 
             case POSITION_NEEDLE_SIZES:
 
-                if (project.getCraftName().equals("Knitting")) { // get knitting needle list
+                builder.setTitle("Tools");
 
-                    builder.setTitle("Knitting Needle Sizes");
+                if (project.getCraftName().equals("Knitting")) { // get knitting needle list
 
                     String[] displayNames = new String[knittingNeedleSizes.size()];
                     boolean[] checkedStatus = new boolean[knittingNeedleSizes.size()];
@@ -352,8 +395,6 @@ public class ProjectInfo extends Fragment{
                     });
                 } else if (project.getCraftName().equals("Crochet")) {
 
-                    builder.setTitle("Crochet Hook Sizes");
-
                     String[] displayNames = new String[crochetNeedleSizes.size()];
                     boolean[] checkedStatus = new boolean[crochetNeedleSizes.size()];
 
@@ -373,32 +414,42 @@ public class ProjectInfo extends Fragment{
                                 crochetNeedleSizes.get(which).setChecked(false);
                         }
                     });
+                }else {
+
+                    TextView textView = new TextView(getActivity());
+                    textView.setPadding(30, 10, 30, 10 );  // Left, top, right, bottom
+                    builder.setView(textView);
+                    textView.setText(R.string.project_update_not_supported);
+
                 }
 
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                if (project.getCraftName().equals("Crochet") ||
+                        project.getCraftName().equals("Knitting")) {
+                    builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                        JsonObject jsonObject = new JsonObject();
-                        JsonArray jsonArray = new JsonArray();
+                            JsonObject jsonObject = new JsonObject();
+                            JsonArray jsonArray = new JsonArray();
 
-                        if (project.getCraftName().equals("Knitting")) {
-                            for (int i = 0; i < knittingNeedleSizes.size(); i++){
-                                if (knittingNeedleSizes.get(i).getChecked())
-                                    jsonArray.add(knittingNeedleSizes.get(i).getId());
+                            if (project.getCraftName().equals("Knitting")) {
+                                for (int i = 0; i < knittingNeedleSizes.size(); i++) {
+                                    if (knittingNeedleSizes.get(i).getChecked())
+                                        jsonArray.add(knittingNeedleSizes.get(i).getId());
+                                }
+                            } else if (project.getCraftName().equals("Crochet")) {
+                                for (int i = 0; i < crochetNeedleSizes.size(); i++) {
+                                    if (crochetNeedleSizes.get(i).getChecked())
+                                        jsonArray.add(crochetNeedleSizes.get(i).getId());
+                                }
                             }
-                        } else if (project.getCraftName().equals("Crochet")){
-                            for (int i = 0; i < crochetNeedleSizes.size(); i++) {
-                                if (crochetNeedleSizes.get(i).getChecked())
-                                    jsonArray.add(crochetNeedleSizes.get(i).getId());
-                            }
+                            jsonObject.add("needle_sizes", jsonArray);
+                            startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+
+                            dialog.dismiss();
                         }
-                        jsonObject.add("needle_sizes", jsonArray);
-                        startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
-
-                        dialog.dismiss();
-                    }
-                });
+                    });
+                }
                 break;
 
             default:
@@ -448,20 +499,26 @@ public class ProjectInfo extends Fragment{
 
                     if (project != null) {
                         reloadData();
+
+                    } else {
+                        Snackbar.make(rootView, "Whoops, something went wrong somewhere. We couldn't update your project.", Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
                     }
 
                 } catch (Exception e) {
                     Log.d(TAG, e.toString());
-
-
                 }
             }
         }
     }
 
     private void loadData(){
-        ratingBar.setRating(project.getRating());
-        progressBar.setProgress(project.getProgress());
+        if (project.getRating() != -1)
+        {
+            ratingBar.setRating(project.getRating() +1);
+        }
+
+        seekBar.setProgress(project.getProgress());
 
         projectItems = new ArrayList<>();
 
@@ -482,13 +539,13 @@ public class ProjectInfo extends Fragment{
         a_packs = project.getPack();
         ArrayList<CardData> a_packCards;
 
-        projectItems.add(POSITION_DATE_STARTED, new CardData("Date Started:", project.getStarted(), "{fa-calendar}"));
-        projectItems.add(POSITION_DATE_FINISHED, new CardData("Date Completed:", project.getCompleted(), "{fa-calendar-check-o}"));
-        projectItems.add(POSITION_MADE_FOR, new CardData("Made for: ", project.getMadeFor(), "{fa-user}"));
-        projectItems.add(POSITION_STATUS, new CardData("Status: ", project.getStatusName(), "{fa-list-alt}"));
-        projectItems.add(POSITION_TAGS, new CardData("Tags: ", s_tags, "{fa-tags}"));
-        projectItems.add(POSITION_SIZE, new CardData("Size: ", project.getSize(), "{fa-asterisk}"));
-        projectItems.add(POSITION_NEEDLE_SIZES, new CardData("Needles/Hooks: ", s_needleSizes, "{fa-wrench}"));
+        projectItems.add(POSITION_DATE_STARTED, new CardData(getString(R.string.project_date_started), project.getStarted(), "{fa-calendar}"));
+        projectItems.add(POSITION_DATE_FINISHED, new CardData(getString(R.string.project_date_completed), project.getCompleted(), "{fa-calendar-check-o}"));
+        projectItems.add(POSITION_MADE_FOR, new CardData(getString(R.string.project_made_for), project.getMadeFor(), "{fa-user}"));
+        projectItems.add(POSITION_STATUS, new CardData(getString(R.string.project_status), project.getStatusName(), "{fa-list-alt}"));
+        projectItems.add(POSITION_TAGS, new CardData(getString(R.string.project_tags), s_tags, "{fa-tags}"));
+        projectItems.add(POSITION_SIZE, new CardData(getString(R.string.project_size), project.getSize(), "{fa-asterisk}"));
+        projectItems.add(POSITION_NEEDLE_SIZES, new CardData(getString(R.string.project_needles_hooks), s_needleSizes, "{fa-wrench}"));
 
 
         for (int i = 0; i < a_packs.size(); i++) {
@@ -508,7 +565,8 @@ public class ProjectInfo extends Fragment{
 
         loadData();
         recyclerViewAdapter.updateList(projectItems);
-
+        Snackbar.make(rootView, "Project updated successfully.", Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show();
     }
 
     private void startDownloadIntentService(int type){
@@ -552,7 +610,8 @@ public class ProjectInfo extends Fragment{
                                         name = "000000";
                                     else if (name.equals("5/0"))
                                         name = "00000";
-                                    else if (name.equals("4/0"));
+                                    else if (name.equals("4/0"))
+                                        name = "0000";
 
                                     displayName = "US " + name + " - " + needle.getMetric() + " mm";
                                 }else
@@ -599,11 +658,9 @@ public class ProjectInfo extends Fragment{
                                 }
                             }
 
-                        }catch (Exception e){}
-
+                        }catch (Exception e){ Log.d(TAG, e.toString()); }
 
                         break;
-
                 }
             }
         }

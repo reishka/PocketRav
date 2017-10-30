@@ -100,13 +100,37 @@ public class DownloadIntentService extends IntentService {
 
             case Constants.FETCH_NEEDLES_CROCHET:
                 apiCall = RavelryAPI.instance().getNeedleSizesCrochet();
+                break;
+
+            case Constants.FETCH_STASH_LIST:
+                String sort = "";
+                try {
+                    sort = intent.getStringExtra(Constants.STASH_SORT_ORDER); }
+                catch (Exception e){}
+                if ( sort == null){
+                    apiCall = RavelryAPI.instance().getStashList(username);
+                }else{
+                    apiCall = RavelryAPI.instance().getStashList(username, sort);
+                }
+
+                break;
+
             default:
                 break;
+
+
+
         }
 
-        if (apiCall == ""){
-            Log.wtf(TAG, "Could not get the API call");
-            errorMessage = "Could not create the API call";
+        if (apiCall.equals("") ){
+            if (!errorMessage.equals(""))
+            {
+                Log.wtf(TAG, errorMessage);
+            }else {
+                Log.wtf(TAG, "Could not get the API call");
+                errorMessage = "Could not create the API call";
+            }
+
         }else{
 
             // Do the actual work of making the API call
