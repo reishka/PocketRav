@@ -131,7 +131,7 @@ public class ProjectNotes extends Fragment {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
                 final EditText et_input = new EditText(getActivity());
 
                 if (notes.equals(EMPTY_NOTES))

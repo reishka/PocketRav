@@ -16,8 +16,8 @@ public class Pack implements Serializable{
     @JsonProperty("dye_lot")                private String dyelot;
     @JsonProperty("grams_per_skein")        private int gramsPerSkein;
     @JsonProperty("id")                     private int id;
-    @JsonProperty("meters_per_skein")       private int metersPerSkein;
-    @JsonProperty("ounces_per_skein")       private int ouncesPerSkein;
+    @JsonProperty("meters_per_skein")       private float metersPerSkein;
+    @JsonProperty("ounces_per_skein")       private float ouncesPerSkein;
     @JsonProperty("personal_name")          private String personalName;
     @JsonProperty("primary_pack_id")        private int primaryPackId;
     @JsonProperty("project_id")             private int projectId;
@@ -27,10 +27,10 @@ public class Pack implements Serializable{
     @JsonProperty("skeins")                 private String skeins;
     @JsonProperty("stash_id")               private int stashId;
     @JsonProperty("thread_size")            private String threadSize;
-    @JsonProperty("total_grams")            private int totalGrams;
-    @JsonProperty("total_meters")           private int totalMeters;
-    @JsonProperty("total_ounces")           private int totalOunces;
-    @JsonProperty("total_yards")            private int totalYards;
+    @JsonProperty("total_grams")            private float totalGrams;
+    @JsonProperty("total_meters")           private float totalMeters;
+    @JsonProperty("total_ounces")           private float totalOunces;
+    @JsonProperty("total_yards")            private float totalYards;
     @JsonProperty("yarn")                   private Yarn yarn;
     @JsonProperty("yarn_id")                private int yarnId;
     @JsonProperty("yarn_name")              private String yarnName;
@@ -55,11 +55,11 @@ public class Pack implements Serializable{
         return id;
     }
 
-    public int getMetersPerSkein() {
+    public float getMetersPerSkein() {
         return metersPerSkein;
     }
 
-    public int getOuncesPerSkein() {
+    public float getOuncesPerSkein() {
         return ouncesPerSkein;
     }
 
@@ -99,19 +99,19 @@ public class Pack implements Serializable{
         return threadSize;
     }
 
-    public int getTotalGrams() {
+    public float getTotalGrams() {
         return totalGrams;
     }
 
-    public int getTotalMeters() {
+    public float getTotalMeters() {
         return totalMeters;
     }
 
-    public int getTotalOunces() {
+    public float getTotalOunces() {
         return totalOunces;
     }
 
-    public int getTotalYards() {
+    public float getTotalYards() {
         return totalYards;
     }
 

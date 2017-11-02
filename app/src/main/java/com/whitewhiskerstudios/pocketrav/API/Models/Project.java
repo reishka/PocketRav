@@ -14,10 +14,19 @@ import java.util.Observable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Project extends Observable implements Serializable{
 
+    public static final int CRAFT_CROCHET = 1;
+    public static final int CRAFT_KNITTING = 2;
+    public static final int CRAFT_WEAVING = 5;
+    public static final int CRAFT_MACHINE_KNITTING = 5;
+    public static final int CRAFT_LOOM_KNITTING = 6;
+
+
     @JsonProperty("completed")          private String completed;
     @JsonProperty("completed_day_set")  private Boolean completedDaySet;
+    @JsonProperty("craft_id")           private int craftId;
     @JsonProperty("craft_name")         private String craftName;
     @JsonProperty("created_at")         private String createdAt;
+    @JsonProperty("ends_per_inch")      private double endsPerInch;
     @JsonProperty("favorites_count")    private int favoritesCount;
     @JsonProperty("first_photo")        private Photo firstPhoto;
     @JsonProperty("id")                 private int id;
@@ -30,6 +39,7 @@ public class Project extends Observable implements Serializable{
     @JsonProperty("pattern_id")         private int patternId;
     @JsonProperty("pattern_name")       private String patternName;
     @JsonProperty("photos")             private ArrayList<Photo> photos;
+    @JsonProperty("picks_per_inch")     private double picksPerInch;
     @JsonProperty("progress")           private int progress;
     @JsonProperty("project_status_id")  private int projectStatusId;
     @JsonProperty("rating")             private int rating;
@@ -37,6 +47,7 @@ public class Project extends Observable implements Serializable{
     @JsonProperty("started")            private String started;
     @JsonProperty("status_name")        private String statusName;
     @JsonProperty("tag_names")          private ArrayList<String> tagNames;
+    @JsonProperty("tools")              private Tools tools;
 
     public Project(){}
 
@@ -46,6 +57,10 @@ public class Project extends Observable implements Serializable{
 
     public Boolean getCompletedDaySet() {
         return completedDaySet;
+    }
+
+    public int getCraftId() {
+        return craftId;
     }
 
     public String getCraftName(){ return craftName; }
@@ -117,6 +132,12 @@ public class Project extends Observable implements Serializable{
     public ArrayList<String> getTagNames() {
         return tagNames;
     }
+
+    public double getEndsPerInch() { return endsPerInch;  }
+
+    public double getPicksPerInch() { return picksPerInch;  }
+
+    public Tools getTools() { return tools; }
 
     public boolean hasFirstPhoto() {
 

@@ -19,9 +19,9 @@ public class RavelryAPI extends DefaultApi10a {
 
     private static final String TAG = "RavelryAPI";
 
+    // CONNECTION
     private static final String AUTHORIZE_URL = "https://www.ravelry.com/oauth/authorize/?oauth_token=%s";
     private static final String CALLBACK_URL = "x-oauthflow://com.whitewhiskerstudios.pocketrav";
-
     private static final String RAV_API_URL = "https://api.ravelry.com";
 
     // USER
@@ -41,74 +41,64 @@ public class RavelryAPI extends DefaultApi10a {
     private static final String NEEDLE_SIZES_CROCHET = "/needles/sizes.json?craft=crochet";
 
     // STASHES
-    public static final String STASH_SORT_ORDER_RECENT = "recent";
-    public static final String STASH_SORT_ORDER_ALPHA = "alpha";
-    public static final String STASH_SORT_ORDER_WEIGHT = "weight";
-    public static final String STASH_SORT_ORDER_COLORFAMILY = "colorfamily";
-    public static final String STASH_SORT_ORDER_YARDS = "yards";
     private static final String STASH_LIST = "/people/%s/stash/list.json";
+    private static final String STASH_UNIFIED_LIST = "/people/%s/stash/unified/list.json";
     private static final String STASH_LIST_SORTED = STASH_LIST + "?sort=%s";
+    private static final String STASH_YARN = "/people/%s/stash/%s.json";
+    private static final String STASH_FIBER = "/people/%s/fiber/%s.json";
 
 
-    protected RavelryAPI() {
-    }
 
-    private static class InstanceHolder {
-        private static final RavelryAPI INSTANCE = new RavelryAPI();
-    }
-
+    protected RavelryAPI() {}
+    private static class InstanceHolder { private static final RavelryAPI INSTANCE = new RavelryAPI(); }
     public static RavelryAPI instance() {
         return InstanceHolder.INSTANCE;
     }
 
-
+    // CONNECTION
     @Override
-    public String getRequestTokenEndpoint() {
-        return "https://www.ravelry.com/oauth/request_token";
-    }
+    public String getRequestTokenEndpoint() { return "https://www.ravelry.com/oauth/request_token"; }
 
     @Override
     public String getAccessTokenEndpoint() {
         return "https://www.ravelry.com/oauth/access_token";
     }
 
-
     @Override
-    public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
-        return String.format(AUTHORIZE_URL, requestToken.getToken());
-    }
+    public String getAuthorizationUrl(OAuth1RequestToken requestToken) { return String.format(AUTHORIZE_URL, requestToken.getToken()); }
 
     public String getCallbackURL() {
         return CALLBACK_URL;
     }
 
 
-    public String getProjectListRequest(String username) {
-        return String.format(RAV_API_URL + PROJECT_LIST, username);
-    }
-
-    public String getUser(String username) {
-        return String.format(RAV_API_URL + USER, username);
-    }
+    // PROJECTS
+    public String getProjectListRequest(String username) { return String.format(RAV_API_URL + PROJECT_LIST, username); }
 
     public String getProject(String username, int projectId) {
         Log.d(TAG, String.valueOf(projectId));
         return String.format(RAV_API_URL + PROJECT, username, projectId);
     }
 
+    // USER
+    public String getUser(String username) {
+        return String.format(RAV_API_URL + USER, username);
+    }
+
+    // NEEDLES
     public String getNeedleSizesKnitting() {
         return RAV_API_URL + NEEDLE_SIZES_KNITTING;
     }
-
     public String getNeedleSizesCrochet(){
         return RAV_API_URL + NEEDLE_SIZES_CROCHET;
     }
 
-    public String getStashList(String username){
-        return String.format(RAV_API_URL + STASH_LIST, username);
-    }
-    public String getStashList(String username, String sort){
-        return String.format(RAV_API_URL + STASH_LIST_SORTED, username, sort);
-    }
+    // STASH
+    public String getStashList(String username){ return String.format(RAV_API_URL + STASH_LIST, username); }
+    public String getStashList(String username, String sort){ return String.format(RAV_API_URL + STASH_LIST_SORTED, username, sort); }
+    public String getStashUnifiedList(String username){ return String.format(RAV_API_URL + STASH_UNIFIED_LIST, username); }
+    public String getStashYarn(String username, int stashId) { return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
+    public String getStashFiber(String username, int stashId) { return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
+
 }
 

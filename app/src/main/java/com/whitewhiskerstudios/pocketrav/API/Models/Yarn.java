@@ -17,12 +17,12 @@ public class Yarn implements Serializable{
     @JsonProperty("grams")              private int grams;
     @JsonProperty("id")                 private int id;
     @JsonProperty("machine_washable")   private Boolean machineWashable;
-    @JsonProperty("max_gauge")          private int maxGauge;
-    @JsonProperty("min_gauge")          private int minGauge;
-    @JsonProperty("max_needle_size")    private int maxNeedleSize;
-    @JsonProperty("min_needle_size")    private int minNeedleSize;
-    @JsonProperty("max_hook_size")      private int maxHookSize;
-    @JsonProperty("min_hook_size")      private int minHookSize;
+    //@JsonProperty("max_gauge")          private float maxGauge;
+    //@JsonProperty("min_gauge")          private float minGauge;
+    //@JsonProperty("max_needle_size")    private float maxNeedleSize;
+    //@JsonProperty("min_needle_size")    private float minNeedleSize;
+    //@JsonProperty("max_hook_size")      private float maxHookSize;
+    //@JsonProperty("min_hook_size")      private float minHookSize;
     @JsonProperty("name")               private String name;
     @JsonProperty("notes_html")         private String notes;
     @JsonProperty("organic")            private Boolean organic;
@@ -55,29 +55,23 @@ public class Yarn implements Serializable{
         return machineWashable;
     }
 
-    public int getMaxGauge() {
-        return maxGauge;
-    }
+    //public float getMaxGauge() { return maxGauge; }
 
-    public int getMinGauge() {
-        return minGauge;
-    }
+   //public float getMinGauge() {return minGauge;     }
 
-    public int getMaxNeedleSize() {
-        return maxNeedleSize;
-    }
+    //public float getMaxNeedleSize() {return maxNeedleSize;     }
 
-    public int getMinNeedleSize() {
-        return minNeedleSize;
-    }
+    //public float getMinNeedleSize() {
+    //    return minNeedleSize;
+   // }
 
-    public int getMaxHookSize() {
-        return maxHookSize;
-    }
+    //public float getMaxHookSize() {
+   //     return maxHookSize;
+   // }
 
-    public int getMinHookSize() {
-        return minHookSize;
-    }
+    //public float getMinHookSize() {
+    //    return minHookSize;
+    //}
 
     public String getName() {
         return name;

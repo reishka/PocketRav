@@ -19,10 +19,12 @@ public class Constants {
     public static final int SUCCESS_RESULT =  1;
     public static final int FAILURE_RESULT = -1;
 
+    // Multi-Use
+    public static final String NOTES_BUNDLE = "NOTES_BUNDLE";  // Project & Notes
+
     // Projects
     public static final String PROJECT_ID = "PROJECT ID";
     public static final String PROJECT_BUNDLE = "PROJECT_BUNDLE";
-    public static final String NOTES_BUNDLE = "NOTES_BUNDLE";
 
     public static final int FETCH_PROJECT_LIST = 1;
     public static final int FETCH_PROJECT = 2;
@@ -45,5 +47,14 @@ public class Constants {
 
     // Stash
     public static final int FETCH_STASH_LIST = 9;
+    public static final int FETCH_UNIFIED_STASH_LIST = 10;
+    public static final int FETCH_STASH_YARN = 11;
+    public static final int FETCH_STASH_FIBER = 12;
     public static final String STASH_SORT_ORDER = "STASH_SORT_ORDER";
+    public static final String STASH_ID = "STASH_ID";
+    public static final String STASH_TYPE = "STASH_TYPE";
+    public static final String STASH_BUNDLE = "STASH_BUNDLE";
+    public static final int STASH_TYPE_FIBER = 101;
+    public static final int STASH_TYPE_YARN = 102;
+    public static final int POST_STASH = 13;
 }

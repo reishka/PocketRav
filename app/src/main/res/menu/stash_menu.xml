@@ -14,7 +14,7 @@
                 android:id="@+id/stash_weight"
                 android:title="Weight" />
             <item
-                android:id="@+id/color_family"
+                android:id="@+id/stash_color_family"
                 android:title="Colorfamily" />
             <item
                 android:id="@+id/stash_recent"

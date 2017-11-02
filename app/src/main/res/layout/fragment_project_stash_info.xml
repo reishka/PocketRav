@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/project_bar"
+        android:background="@color/cardview_dark_background">
+
+        <Button
+            android:id="@+id/add_photo"
+            android:textColor="@color/ravelry_pink"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Add Photos"
+            android:background="@color/cardview_dark_background"/>
+
+        <Button
+            android:id="@+id/edit_yarns"
+            android:textColor="@color/ravelry_pink"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Edit Yarns"
+            android:background="@color/cardview_dark_background"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/stash_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/cardview_dark_background">
+
+        <Button
+            android:id="@+id/add_stash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_dark_background"
+            android:text="Add Photos"
+            android:textColor="@color/ravelry_pink" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_above="@id/linearlayout">
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:stepSize="1"/>
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/seekBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dsb_min = "0"
+            app:dsb_max = "100"
+            app:dsb_progressColor="@color/ravelry_pink"
+            app:dsb_indicatorColor="@color/ravelry_pink"/>
+
+        <include
+            layout="@layout/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</RelativeLayout>

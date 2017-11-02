@@ -112,7 +112,24 @@ public class DownloadIntentService extends IntentService {
                 }else{
                     apiCall = RavelryAPI.instance().getStashList(username, sort);
                 }
+                break;
 
+            case Constants.FETCH_UNIFIED_STASH_LIST:
+                apiCall = RavelryAPI.instance().getStashUnifiedList(username);
+                break;
+
+            case Constants.FETCH_STASH_YARN:
+                int stashId = intent.getIntExtra(Constants.STASH_ID, -1);
+                if (stashId != -1){
+                    apiCall = RavelryAPI.instance().getStashYarn(username, stashId);
+                }
+                break;
+
+            case Constants.FETCH_STASH_FIBER:
+                int fiberStashId = intent.getIntExtra(Constants.STASH_ID, -1);
+                if (fiberStashId != -1){
+                    apiCall = RavelryAPI.instance().getStashFiber(username, fiberStashId);
+                }
                 break;
 
             default:

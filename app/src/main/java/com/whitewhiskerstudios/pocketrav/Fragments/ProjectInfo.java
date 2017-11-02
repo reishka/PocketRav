@@ -73,14 +73,15 @@ public class ProjectInfo extends Fragment{
     private static final int POSITION_STATUS = 3;
     private static final int POSITION_TAGS = 4;
     private static final int POSITION_SIZE = 5;
-    private static final int POSITION_NEEDLE_SIZES = 6;
+    private static final int POSITION_TOOLS = 6;
+    private static final int POSITION_EPI_PPI = 7;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         bundle = getArguments();
-        rootView = inflater.inflate(R.layout.fragment_project_info, container, false);
+        rootView = inflater.inflate(R.layout.fragment_project_stash_info, container, false);
         return rootView;
     }
 
@@ -96,8 +97,10 @@ public class ProjectInfo extends Fragment{
         if (bundle != null) {
             project = (Project) bundle.getSerializable(Constants.PROJECT_BUNDLE);
 
-            startDownloadIntentService(Constants.FETCH_NEEDLES_CROCHET);
-            startDownloadIntentService(Constants.FETCH_NEEDLES_KNITTING);
+            if (project.getCraftId() == Project.CRAFT_KNITTING || project.getCraftId() == Project.CRAFT_CROCHET) {
+                startDownloadIntentService(Constants.FETCH_NEEDLES_CROCHET);
+                startDownloadIntentService(Constants.FETCH_NEEDLES_KNITTING);
+            }
 
             initViews();
             loadData();
@@ -114,7 +117,7 @@ public class ProjectInfo extends Fragment{
                                 position == POSITION_MADE_FOR ||
                                 position == POSITION_STATUS ||
                                 position == POSITION_SIZE ||
-                                position == POSITION_NEEDLE_SIZES ){
+                                position == POSITION_TOOLS){
                             return 1;
                         }else
                             return 2;
@@ -185,6 +188,9 @@ public class ProjectInfo extends Fragment{
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
         LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
+
+        LinearLayout stash_bar = (LinearLayout)rootView.findViewById(R.id.stash_bar);
+        stash_bar.setVisibility(View.GONE);
     }
 
     private String getTags(){
@@ -368,11 +374,11 @@ public class ProjectInfo extends Fragment{
                 });
                 break;
 
-            case POSITION_NEEDLE_SIZES:
+            case POSITION_TOOLS:
 
                 builder.setTitle("Tools");
 
-                if (project.getCraftName().equals("Knitting")) { // get knitting needle list
+                if (project.getCraftId() == Project.CRAFT_KNITTING) { // get knitting needle list
 
                     String[] displayNames = new String[knittingNeedleSizes.size()];
                     boolean[] checkedStatus = new boolean[knittingNeedleSizes.size()];
@@ -393,7 +399,7 @@ public class ProjectInfo extends Fragment{
                                 knittingNeedleSizes.get(which).setChecked(false);
                         }
                     });
-                } else if (project.getCraftName().equals("Crochet")) {
+                } else if (project.getCraftId() == Project.CRAFT_CROCHET) {
 
                     String[] displayNames = new String[crochetNeedleSizes.size()];
                     boolean[] checkedStatus = new boolean[crochetNeedleSizes.size()];
@@ -545,7 +551,12 @@ public class ProjectInfo extends Fragment{
         projectItems.add(POSITION_STATUS, new CardData(getString(R.string.project_status), project.getStatusName(), "{fa-list-alt}"));
         projectItems.add(POSITION_TAGS, new CardData(getString(R.string.project_tags), s_tags, "{fa-tags}"));
         projectItems.add(POSITION_SIZE, new CardData(getString(R.string.project_size), project.getSize(), "{fa-asterisk}"));
-        projectItems.add(POSITION_NEEDLE_SIZES, new CardData(getString(R.string.project_needles_hooks), s_needleSizes, "{fa-wrench}"));
+
+        if (project.getCraftId() == Project.CRAFT_CROCHET || project.getCraftId() == Project.CRAFT_KNITTING)
+            projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_needles_hooks), s_needleSizes, "{fa-wrench}"));
+        else if (project.getCraftId() == Project.CRAFT_WEAVING)
+            projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_loom), project.getTools().getMake() +
+                    " " + project.getTools().getModel(), "{fa-wrench}" ));
 
 
         for (int i = 0; i < a_packs.size(); i++) {

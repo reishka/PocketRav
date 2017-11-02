@@ -92,6 +92,23 @@ public class UploadIntentService extends IntentService{
                 Log.d(TAG, projectString);
                 Log.d(TAG, String.valueOf(projectId));
                 break;
+
+            case Constants.POST_STASH:
+                int stashId = intent.getIntExtra(Constants.STASH_ID, -1);
+                String stashString = intent.getStringExtra(Constants.POST_JSON_STRING);
+                int type = intent.getIntExtra(Constants.STASH_TYPE, -1);
+
+                if (type == Constants.STASH_TYPE_YARN)
+                    apiCall = RavelryAPI.instance().getStashYarn(username, stashId);
+                else
+                    apiCall = RavelryAPI.instance().getStashFiber(username, stashId);
+
+                oAuthRequest = new OAuthRequest(Verb.POST, apiCall);
+                oAuthRequest.addBodyParameter("data", stashString);
+                Log.d(TAG, stashString);
+                Log.d(TAG, String.valueOf(stashId));
+                break;
+
         }
 
         if (apiCall == ""){
