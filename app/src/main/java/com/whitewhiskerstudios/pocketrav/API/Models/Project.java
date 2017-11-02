@@ -47,7 +47,7 @@ public class Project extends Observable implements Serializable{
     @JsonProperty("started")            private String started;
     @JsonProperty("status_name")        private String statusName;
     @JsonProperty("tag_names")          private ArrayList<String> tagNames;
-    @JsonProperty("tools")              private Tools tools;
+    @JsonProperty("tools")              private ArrayList<Tools> tools;
 
     public Project(){}
 
@@ -137,7 +137,7 @@ public class Project extends Observable implements Serializable{
 
     public double getPicksPerInch() { return picksPerInch;  }
 
-    public Tools getTools() { return tools; }
+    public ArrayList<Tools> getTools() { return tools; }
 
     public boolean hasFirstPhoto() {
 

@@ -30,6 +30,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.whitewhiskerstudios.pocketrav.API.Models.NeedleSizes;
 import com.whitewhiskerstudios.pocketrav.API.Models.Pack;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
+import com.whitewhiskerstudios.pocketrav.API.Models.Tools;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithFontAwesome;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
@@ -185,12 +186,16 @@ public class ProjectInfo extends Fragment{
             }
         });
 
+        LinearLayout stash_bar = (LinearLayout)rootView.findViewById(R.id.stash_bar);
+        stash_bar.setVisibility(View.GONE);
+
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
+        //recyclerView.setBackgroundColor(Color.TRANSPARENT);
         LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
 
-        LinearLayout stash_bar = (LinearLayout)rootView.findViewById(R.id.stash_bar);
-        stash_bar.setVisibility(View.GONE);
+
+
     }
 
     private String getTags(){
@@ -541,6 +546,15 @@ public class ProjectInfo extends Fragment{
                 s_needleSizes += a_needleSizes.get(i).getName() + ", \n";
         }
 
+        ArrayList<Tools> a_tools = project.getTools();
+        String s_tools = "";
+        for (int i = 0; i < a_tools.size(); i++){
+            if (i == a_tools.size() - 1)
+                s_tools += a_tools.get(i).getMake() + " " + a_tools.get(i).getModel();
+            else
+                s_tools += a_tools.get(i).getMake() + " " + a_tools.get(i).getModel() + ", \n";
+        }
+
         ArrayList<Pack> a_packs = new ArrayList<>();
         a_packs = project.getPack();
         ArrayList<CardData> a_packCards;
@@ -555,8 +569,7 @@ public class ProjectInfo extends Fragment{
         if (project.getCraftId() == Project.CRAFT_CROCHET || project.getCraftId() == Project.CRAFT_KNITTING)
             projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_needles_hooks), s_needleSizes, "{fa-wrench}"));
         else if (project.getCraftId() == Project.CRAFT_WEAVING)
-            projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_loom), project.getTools().getMake() +
-                    " " + project.getTools().getModel(), "{fa-wrench}" ));
+            projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_loom), s_tools, "{fa-wrench}" ));
 
 
         for (int i = 0; i < a_packs.size(); i++) {
