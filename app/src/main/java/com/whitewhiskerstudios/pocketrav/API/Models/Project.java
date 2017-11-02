@@ -5,28 +5,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * Created by rachael on 10/13/17.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Project implements Serializable{
+public class Project extends Observable implements Serializable{
+
+    public static final int CRAFT_CROCHET = 1;
+    public static final int CRAFT_KNITTING = 2;
+    public static final int CRAFT_WEAVING = 5;
+    public static final int CRAFT_MACHINE_KNITTING = 5;
+    public static final int CRAFT_LOOM_KNITTING = 6;
+
 
     @JsonProperty("completed")          private String completed;
     @JsonProperty("completed_day_set")  private Boolean completedDaySet;
+    @JsonProperty("craft_id")           private int craftId;
+    @JsonProperty("craft_name")         private String craftName;
     @JsonProperty("created_at")         private String createdAt;
+    @JsonProperty("ends_per_inch")      private double endsPerInch;
     @JsonProperty("favorites_count")    private int favoritesCount;
     @JsonProperty("first_photo")        private Photo firstPhoto;
     @JsonProperty("id")                 private int id;
     @JsonProperty("made_for")           private String madeFor;
     @JsonProperty("made_for_user_id")   private int madeForUserId;
     @JsonProperty("name")               private String name;
+    @JsonProperty("needle_sizes")       private ArrayList<NeedleSizes> needleSizes;
     @JsonProperty("notes")              private String notes;
-    //@JsonProperty("packs")              private Pack pack;
+    @JsonProperty("packs")              private ArrayList<Pack> pack;
     @JsonProperty("pattern_id")         private int patternId;
     @JsonProperty("pattern_name")       private String patternName;
     @JsonProperty("photos")             private ArrayList<Photo> photos;
+    @JsonProperty("picks_per_inch")     private double picksPerInch;
     @JsonProperty("progress")           private int progress;
     @JsonProperty("project_status_id")  private int projectStatusId;
     @JsonProperty("rating")             private int rating;
@@ -34,6 +47,7 @@ public class Project implements Serializable{
     @JsonProperty("started")            private String started;
     @JsonProperty("status_name")        private String statusName;
     @JsonProperty("tag_names")          private ArrayList<String> tagNames;
+    @JsonProperty("tools")              private Tools tools;
 
     public Project(){}
 
@@ -44,6 +58,12 @@ public class Project implements Serializable{
     public Boolean getCompletedDaySet() {
         return completedDaySet;
     }
+
+    public int getCraftId() {
+        return craftId;
+    }
+
+    public String getCraftName(){ return craftName; }
 
     public String getCreatedAt() {
         return createdAt;
@@ -61,7 +81,7 @@ public class Project implements Serializable{
         return id;
     }
 
-    public String getMadeFor() {
+    public synchronized String getMadeFor() {
         return madeFor;
     }
 
@@ -113,10 +133,32 @@ public class Project implements Serializable{
         return tagNames;
     }
 
+    public double getEndsPerInch() { return endsPerInch;  }
+
+    public double getPicksPerInch() { return picksPerInch;  }
+
+    public Tools getTools() { return tools; }
+
     public boolean hasFirstPhoto() {
 
         return !(this.firstPhoto == null);
     }
 
     public ArrayList<Photo> getPhotos() { return photos; }
+
+    public ArrayList<Pack> getPack() {
+        return pack;
+    }
+
+    public ArrayList<NeedleSizes> getNeedleSizes() {
+        return needleSizes;
+    }
+
+    public void setMadeFor(String madeFor) {
+        synchronized (this){
+        this.madeFor = madeFor;}
+
+        setChanged();
+        notifyObservers();
+    }
 }

@@ -2,8 +2,8 @@
     <string name="app_name">PocketRav</string>
 
     <!-- Activity Names -->
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_authorize">Authorize your account</string>
+    <string name="title_activity_main">PocketRav</string>
+    <string name="title_activity_authorize">Authorize Your Account</string>
 
     <!-- Nav Drawer Options -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -28,4 +28,15 @@
     <string name="navigation_drawer_search_project">Search Projects</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- Project -->
+    <string name="project_update_not_supported">Ravelry does not support adding or modifying tools of projects that are not crochet or knitting projects via apps at this time. To modify the tools used in this project you will need to log into ravelry via your web browser.</string>
+    <string name="project_date_started">Date Started:</string>
+    <string name="project_date_completed">Date Completed:</string>
+    <string name="project_made_for">Made For:</string>
+    <string name="project_status">Status:</string>
+    <string name="project_tags">Tags:</string>
+    <string name="project_size">Size:</string>
+    <string name="project_needles_hooks">Needles/Hooks:</string>
+    <string name="project_loom">Loom:</string>
 </resources>

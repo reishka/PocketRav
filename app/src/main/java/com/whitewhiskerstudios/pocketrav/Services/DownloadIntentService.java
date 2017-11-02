@@ -78,38 +78,81 @@ public class DownloadIntentService extends IntentService {
 
             case Constants.FETCH_USER:
                 apiCall = RavelryAPI.instance().getUser(username);
-                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
             case Constants.FETCH_PROJECT_LIST:
                 apiCall = RavelryAPI.instance().getProjectListRequest(username);
-                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 break;
 
             case Constants.FETCH_PROJECT:
                 int projectId = intent.getIntExtra(Constants.PROJECT_ID, -1);
                 if (projectId != -1){
                     apiCall = RavelryAPI.instance().getProject(username, projectId);
-                    oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
+
                 }else{
                     errorMessage = "No project ID.";
                 }
                 break;
 
+            case Constants.FETCH_NEEDLES_KNITTING:
+                apiCall = RavelryAPI.instance().getNeedleSizesKnitting();
+                break;
+
+            case Constants.FETCH_NEEDLES_CROCHET:
+                apiCall = RavelryAPI.instance().getNeedleSizesCrochet();
+                break;
+
+            case Constants.FETCH_STASH_LIST:
+                String sort = "";
+                try {
+                    sort = intent.getStringExtra(Constants.STASH_SORT_ORDER); }
+                catch (Exception e){}
+                if ( sort == null){
+                    apiCall = RavelryAPI.instance().getStashList(username);
+                }else{
+                    apiCall = RavelryAPI.instance().getStashList(username, sort);
+                }
+                break;
+
+            case Constants.FETCH_UNIFIED_STASH_LIST:
+                apiCall = RavelryAPI.instance().getStashUnifiedList(username);
+                break;
+
+            case Constants.FETCH_STASH_YARN:
+                int stashId = intent.getIntExtra(Constants.STASH_ID, -1);
+                if (stashId != -1){
+                    apiCall = RavelryAPI.instance().getStashYarn(username, stashId);
+                }
+                break;
+
+            case Constants.FETCH_STASH_FIBER:
+                int fiberStashId = intent.getIntExtra(Constants.STASH_ID, -1);
+                if (fiberStashId != -1){
+                    apiCall = RavelryAPI.instance().getStashFiber(username, fiberStashId);
+                }
+                break;
+
             default:
                 break;
+
+
+
         }
 
-        if (apiCall == ""){
-            Log.wtf(TAG, "Could not get the API call");
-            errorMessage = "Could not create the API call";
-        }else if (oAuthRequest == null) {
-            Log.wtf(TAG, "oAuthRequest could not be created.");
-            errorMessage = "oAuthRequest could not be created.";
+        if (apiCall.equals("") ){
+            if (!errorMessage.equals(""))
+            {
+                Log.wtf(TAG, errorMessage);
+            }else {
+                Log.wtf(TAG, "Could not get the API call");
+                errorMessage = "Could not create the API call";
+            }
+
         }else{
 
             // Do the actual work of making the API call
             try {
+                oAuthRequest = new OAuthRequest(Verb.GET, apiCall);
                 service.signRequest(accessToken, oAuthRequest);
                 final Response response = service.execute(oAuthRequest);
                 responseBody = response.getBody();
@@ -125,7 +168,6 @@ public class DownloadIntentService extends IntentService {
         }
         else
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
-
     }
 
     void deliverResultToReceiver(int resultCode, String message)
@@ -136,17 +178,4 @@ public class DownloadIntentService extends IntentService {
         resultReceiver.send(resultCode, bundle);
 
     }
-
-    void deliverResultToReceiver(int resultCode, Response response)
-    {
-        Gson gson = new Gson();
-        String json_response = gson.toJson(response);
-
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, json_response);
-        resultReceiver.send(resultCode, bundle);
-
-    }
-
-
 }

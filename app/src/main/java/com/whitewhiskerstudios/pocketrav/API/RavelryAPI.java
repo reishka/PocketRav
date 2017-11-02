@@ -2,22 +2,26 @@ package com.whitewhiskerstudios.pocketrav.API;
 
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.api.DefaultApi10a;
 import com.github.scribejava.core.builder.api.DefaultApi20;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
+import com.whitewhiskerstudios.pocketrav.API.Models.Project;
+
+import org.json.JSONObject;
 
 /**
  * Created by rachael on 9/16/17.
  */
 
-public class RavelryAPI extends DefaultApi10a{
+public class RavelryAPI extends DefaultApi10a {
 
     private static final String TAG = "RavelryAPI";
 
+    // CONNECTION
     private static final String AUTHORIZE_URL = "https://www.ravelry.com/oauth/authorize/?oauth_token=%s";
     private static final String CALLBACK_URL = "x-oauthflow://com.whitewhiskerstudios.pocketrav";
-
     private static final String RAV_API_URL = "https://api.ravelry.com";
 
     // USER
@@ -32,47 +36,69 @@ public class RavelryAPI extends DefaultApi10a{
 
     // YARNS
 
-    protected RavelryAPI(){}
+    // NEEDLES
+    private static final String NEEDLE_SIZES_KNITTING = "/needles/sizes.json?craft=knitting";
+    private static final String NEEDLE_SIZES_CROCHET = "/needles/sizes.json?craft=crochet";
 
-    private static class InstanceHolder {
-        private static final RavelryAPI INSTANCE = new RavelryAPI();
-    }
+    // STASHES
+    private static final String STASH_LIST = "/people/%s/stash/list.json";
+    private static final String STASH_UNIFIED_LIST = "/people/%s/stash/unified/list.json";
+    private static final String STASH_LIST_SORTED = STASH_LIST + "?sort=%s";
+    private static final String STASH_YARN = "/people/%s/stash/%s.json";
+    private static final String STASH_FIBER = "/people/%s/fiber/%s.json";
 
-    public static RavelryAPI instance(){
+
+
+    protected RavelryAPI() {}
+    private static class InstanceHolder { private static final RavelryAPI INSTANCE = new RavelryAPI(); }
+    public static RavelryAPI instance() {
         return InstanceHolder.INSTANCE;
     }
 
-
+    // CONNECTION
     @Override
-    public String getRequestTokenEndpoint() {
-        return "https://www.ravelry.com/oauth/request_token";
-    }
+    public String getRequestTokenEndpoint() { return "https://www.ravelry.com/oauth/request_token"; }
 
     @Override
     public String getAccessTokenEndpoint() {
         return "https://www.ravelry.com/oauth/access_token";
     }
 
-
-
     @Override
-    public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
-        return String.format(AUTHORIZE_URL, requestToken.getToken());
-    }
+    public String getAuthorizationUrl(OAuth1RequestToken requestToken) { return String.format(AUTHORIZE_URL, requestToken.getToken()); }
 
-    public String getCallbackURL(){
+    public String getCallbackURL() {
         return CALLBACK_URL;
     }
 
 
+    // PROJECTS
+    public String getProjectListRequest(String username) { return String.format(RAV_API_URL + PROJECT_LIST, username); }
 
-    public String getProjectListRequest(String username){
-        return String.format(RAV_API_URL + PROJECT_LIST, username); }
+    public String getProject(String username, int projectId) {
+        Log.d(TAG, String.valueOf(projectId));
+        return String.format(RAV_API_URL + PROJECT, username, projectId);
+    }
 
-    public String getUser(String username){
-        return String.format(RAV_API_URL + USER, username); }
+    // USER
+    public String getUser(String username) {
+        return String.format(RAV_API_URL + USER, username);
+    }
 
-    public String getProject(String username, int projectId){
-        return String.format(RAV_API_URL + PROJECT, username, projectId); }
+    // NEEDLES
+    public String getNeedleSizesKnitting() {
+        return RAV_API_URL + NEEDLE_SIZES_KNITTING;
+    }
+    public String getNeedleSizesCrochet(){
+        return RAV_API_URL + NEEDLE_SIZES_CROCHET;
+    }
+
+    // STASH
+    public String getStashList(String username){ return String.format(RAV_API_URL + STASH_LIST, username); }
+    public String getStashList(String username, String sort){ return String.format(RAV_API_URL + STASH_LIST_SORTED, username, sort); }
+    public String getStashUnifiedList(String username){ return String.format(RAV_API_URL + STASH_UNIFIED_LIST, username); }
+    public String getStashYarn(String username, int stashId) { return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
+    public String getStashFiber(String username, int stashId) { return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
 
 }
+

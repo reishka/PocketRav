@@ -1,14 +1,14 @@
 package com.whitewhiskerstudios.pocketrav.Activities;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.os.ResultReceiver;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,7 +28,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.squareup.picasso.Picasso;
 import com.whitewhiskerstudios.pocketrav.API.Models.User;
-import com.whitewhiskerstudios.pocketrav.Fragments.CardView;
+import com.whitewhiskerstudios.pocketrav.Fragments.CardViewProject;
+import com.whitewhiskerstudios.pocketrav.Fragments.CardViewStash;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.API.AccessTokenActivity_;
@@ -163,12 +164,12 @@ public class MainActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putInt(Constants.FETCH_TYPE, Constants.FETCH_PROJECT_LIST);
 
-            CardView cardViewFragment = new CardView();
-            cardViewFragment.setArguments(bundle);
+            CardViewProject cardViewProjectFragment = new CardViewProject();
+            cardViewProjectFragment.setArguments(bundle);
 
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frame_layout, cardViewFragment );
+            fragmentTransaction.add(R.id.frame_layout, cardViewProjectFragment);
             fragmentTransaction.addToBackStack(null);
 
             fragmentTransaction.commit();
@@ -176,6 +177,19 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_handspun) {
 
         } else if (id == R.id.nav_stash) {
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.FETCH_TYPE, Constants.FETCH_STASH_LIST);
+
+            CardViewStash cardViewStashFragment = new CardViewStash();
+            cardViewStashFragment.setArguments(bundle);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.frame_layout, cardViewStashFragment);
+            fragmentTransaction.addToBackStack(null);
+
+            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_queue) {
 
