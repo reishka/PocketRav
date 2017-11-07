@@ -28,7 +28,7 @@ import static com.whitewhiskerstudios.pocketrav.API.Keys.SECRET_KEY;
  */
 
 @EService
-public class DownloadIntentService extends IntentService {
+public class DownloadIntentService extends RavIntentService {
 
     @Pref
     PocketRavPrefs_ prefs;
@@ -38,6 +38,7 @@ public class DownloadIntentService extends IntentService {
     private ResultReceiver resultReceiver;
 
     private String responseBody = null;
+    int responseCode = -1;
     int fetchType = -1;
 
     public DownloadIntentService() { super(TAG); }
@@ -132,15 +133,16 @@ public class DownloadIntentService extends IntentService {
                 }
                 break;
 
-            default:
+            case Constants.FETCH_UPLOAD_PHOTO_STATUS:
+                    apiCall = RavelryAPI.instance().getUploadStatus();
                 break;
 
-
-
+            default:
+                break;
         }
 
-        if (apiCall.equals("") ){
-            if (!errorMessage.equals(""))
+        if (apiCall.isEmpty() ){
+            if (!errorMessage.isEmpty())
             {
                 Log.wtf(TAG, errorMessage);
             }else {
@@ -156,6 +158,7 @@ public class DownloadIntentService extends IntentService {
                 service.signRequest(accessToken, oAuthRequest);
                 final Response response = service.execute(oAuthRequest);
                 responseBody = response.getBody();
+                responseCode = response.getCode();
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -163,11 +166,26 @@ public class DownloadIntentService extends IntentService {
         }
 
 
-        if (errorMessage == "" && responseBody != null) {
-            deliverResultToReceiver(Constants.SUCCESS_RESULT, responseBody);
+        if (responseCode == RESPONSE_OK) {
+
+            if (errorMessage.isEmpty() && responseBody != null) {
+
+                deliverResultToReceiver(Constants.SUCCESS_RESULT, responseBody);
+            } else
+                deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+
+        } else {
+            if (responseCode == -1) {     // We never even got to make a request...
+                if (!errorMessage.isEmpty())
+                    deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+                else
+                    deliverResultToReceiver(Constants.FAILURE_RESULT, "Something really screwed up!");
+            }else{
+                errorMessage = getErrorResponseString(responseCode);
+                Log.d(TAG, errorMessage);
+                deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+            }
         }
-        else
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
     }
 
     void deliverResultToReceiver(int resultCode, String message)

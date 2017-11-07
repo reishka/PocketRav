@@ -1,13 +1,21 @@
 package com.whitewhiskerstudios.pocketrav.Fragments;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.ResultReceiver;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,14 +23,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.eclipsesource.json.Json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.joanzapata.iconify.Iconify;
@@ -30,6 +41,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.whitewhiskerstudios.pocketrav.API.Models.NeedleSizes;
 import com.whitewhiskerstudios.pocketrav.API.Models.Pack;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
+import com.whitewhiskerstudios.pocketrav.API.Models.Tools;
+import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithFontAwesome;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
@@ -39,8 +52,9 @@ import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by rachael on 10/14/17.
@@ -67,6 +81,11 @@ public class ProjectInfo extends Fragment{
     private UploadIntentResultReceiver uploadIntentResultReceiver;
     private DownloadIntentResultReceiver downloadIntentResultReceiver;
 
+    String uploadToken = "";
+    Uri selectedImage = null;
+    String imagePath = "";
+    ArrayList<String> imageIds = null;
+
     private static final int POSITION_DATE_STARTED = 0;
     private static final int POSITION_DATE_FINISHED = 1;
     private static final int POSITION_MADE_FOR = 2;
@@ -75,6 +94,8 @@ public class ProjectInfo extends Fragment{
     private static final int POSITION_SIZE = 5;
     private static final int POSITION_TOOLS = 6;
     private static final int POSITION_EPI_PPI = 7;
+
+    private static final int CAMERA_LOAD_IMAGE = 1000;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -185,12 +206,74 @@ public class ProjectInfo extends Fragment{
             }
         });
 
+        LinearLayout stash_bar = (LinearLayout)rootView.findViewById(R.id.stash_bar);
+        stash_bar.setVisibility(View.GONE);
+
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
         LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
 
-        LinearLayout stash_bar = (LinearLayout)rootView.findViewById(R.id.stash_bar);
-        stash_bar.setVisibility(View.GONE);
+        Button cameraButton = rootView.findViewById(R.id.add_photo);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    } else {
+                        Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(cameraIntent, CAMERA_LOAD_IMAGE);
+                    }
+                }
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
+
+            selectedImage = data.getData();
+
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imagePath = cursor.getString(columnIndex);
+
+                cursor.close();
+            }
+
+
+            // TODO:  Project Create Photo API Call goes here
+            // Note that in order to upload photos, we need to:
+            // 1. Get a token from POST /upload/request_token.json
+            // 2. Use this token with an array of images with POST /upload/image.json
+            // 3. Keep an eye on the image uploading/processing with GET /upload/image/status.json (may not be necessary)
+            // 4. Get the Image ID and associate it with our project
+
+            if (uploadToken.isEmpty())
+                startUploadIntentService(Constants.POST_UPLOAD_TOKEN);
+            else
+                uploadPhotos();
+        }
+    }
+
+    private void uploadPhotos(){
+
+        if (!uploadToken.isEmpty() && !imagePath.isEmpty()){
+        //if (selectedImage != null && !uploadToken.isEmpty()){
+            startUploadIntentService(Constants.POST_UPLOAD_PHOTOS, uploadToken, imagePath);
+        }
+
     }
 
     private String getTags(){
@@ -232,7 +315,7 @@ public class ProjectInfo extends Fragment{
 
                         String date = String.valueOf(year) + "/" + String.valueOf(month) + "/" + String.valueOf(day);
 
-                        jsonObject.addProperty("started", date);
+                        jsonObject.addProperty(Project.PROPERTY_STARTED, date);
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
@@ -255,7 +338,7 @@ public class ProjectInfo extends Fragment{
 
                         String date = String.valueOf(year) + "/" + String.valueOf(month) + "/" + String.valueOf(day);
 
-                        jsonObject.addProperty("completed", date);
+                        jsonObject.addProperty(Project.PROPERTY_COMPLETED, date);
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
@@ -271,7 +354,7 @@ public class ProjectInfo extends Fragment{
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("made_for", et_input.getText().toString());
+                        jsonObject.addProperty(Project.PROPERTY_MADE_FOR, et_input.getText().toString());
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
@@ -311,8 +394,8 @@ public class ProjectInfo extends Fragment{
                         }
 
                         JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("project_status_id", String.valueOf(i_status));
-                        jsonObject.addProperty("status_name", s_status);
+                        jsonObject.addProperty(Project.PROPERTY_STATUS_ID, String.valueOf(i_status));
+                        jsonObject.addProperty(Project.PROPERTY_STATUS_NAME, s_status);
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
@@ -332,25 +415,29 @@ public class ProjectInfo extends Fragment{
 
                         JsonObject jsonObject = new JsonObject();
                         String tags = et_input.getText().toString();
-                        String[] a_tags = null;
+                        String[] a_tags = new String[0];
                         JsonArray jsonArray = new JsonArray();
 
-                            if (tags.contains(","))
-                                a_tags = tags.split(",");
-                            else if (tags.contains(" "))
-                                a_tags = tags.split(" ");
+                        tags = tags.trim();
 
-                        if (a_tags!= null && a_tags.length > 0 ) {
+                        if (tags.contains(","))
+                             a_tags = tags.split(",");  // Multiple tags with commas
+                        else if (tags.contains(" "))
+                            a_tags = tags.split(" ");   // Multiple tags with spaces
+                        else
+                                a_tags[0] = tags;       // Only 1 tag
+
+                        if (a_tags.length > 0 ) {
                             for (int i = 0; i < a_tags.length; i++) {
                                 a_tags[i] = a_tags[i].trim();
                                 if (a_tags[i].contains(" ")) {
-                                    a_tags[i] = a_tags[i].replace(" ", "");
+                                    a_tags[i] = a_tags[i].replace(" ", ""); // Rav smushes everything together into one tag
                                 }
                             }
                             for (String tag : a_tags)
                                 jsonArray.add(tag);
                         }
-                            jsonObject.add("tag_names", jsonArray);
+                            jsonObject.add(Project.PROPERTY_TAG_NAMES, jsonArray);
                             startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
@@ -366,7 +453,7 @@ public class ProjectInfo extends Fragment{
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("size", et_input.getText().toString());
+                        jsonObject.addProperty(Project.PROPERTY_SIZE, et_input.getText().toString());
                         startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                         dialog.dismiss();
@@ -429,8 +516,8 @@ public class ProjectInfo extends Fragment{
 
                 }
 
-                if (project.getCraftName().equals("Crochet") ||
-                        project.getCraftName().equals("Knitting")) {
+                if (project.getCraftId() == Project.CRAFT_CROCHET ||
+                        project.getCraftId() == Project.CRAFT_KNITTING) {
                     builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -438,18 +525,22 @@ public class ProjectInfo extends Fragment{
                             JsonObject jsonObject = new JsonObject();
                             JsonArray jsonArray = new JsonArray();
 
-                            if (project.getCraftName().equals("Knitting")) {
-                                for (int i = 0; i < knittingNeedleSizes.size(); i++) {
-                                    if (knittingNeedleSizes.get(i).getChecked())
-                                        jsonArray.add(knittingNeedleSizes.get(i).getId());
-                                }
-                            } else if (project.getCraftName().equals("Crochet")) {
-                                for (int i = 0; i < crochetNeedleSizes.size(); i++) {
-                                    if (crochetNeedleSizes.get(i).getChecked())
-                                        jsonArray.add(crochetNeedleSizes.get(i).getId());
-                                }
+                            switch (project.getCraftId()){
+                                case Project.CRAFT_KNITTING:
+                                    for (int i = 0; i < knittingNeedleSizes.size(); i++) {
+                                        if (knittingNeedleSizes.get(i).getChecked())
+                                            jsonArray.add(knittingNeedleSizes.get(i).getId());
+                                    }
+                                    break;
+                                case Project.CRAFT_CROCHET:
+                                    for (int i = 0; i < crochetNeedleSizes.size(); i++) {
+                                        if (crochetNeedleSizes.get(i).getChecked())
+                                            jsonArray.add(crochetNeedleSizes.get(i).getId());
+                                    }
+                                    break;
                             }
-                            jsonObject.add("needle_sizes", jsonArray);
+
+                            jsonObject.add(Project.PROPERTY_NEEDLE_SIZES, jsonArray);
                             startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
 
                             dialog.dismiss();
@@ -457,6 +548,52 @@ public class ProjectInfo extends Fragment{
                     });
                 }
                 break;
+
+            case POSITION_EPI_PPI:
+                if (project.getCraftId() == Project.CRAFT_WEAVING)
+                {
+                    //builder.setView(et_input);
+                    builder.setTitle("EPI & PPI");
+                    final EditText et_input2 = new EditText(getActivity());
+                    TextView tv_epi = new TextView(getActivity());
+                    TextView tv_ppi = new TextView(getActivity());
+                    LinearLayout linearLayout = new LinearLayout(getActivity());
+
+
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    linearLayout.setLayoutParams(params);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                    tv_epi.setText("EPI: ");
+                    tv_ppi.setText("PPI: ");
+
+                    linearLayout.addView(tv_epi);
+                    linearLayout.addView(et_input);
+                    linearLayout.addView(tv_ppi);
+                    linearLayout.addView(et_input2);
+
+                    builder.setView(linearLayout);
+
+                    builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            JsonObject jsonObject = new JsonObject();
+
+                            if (!et_input.getText().toString().isEmpty())
+                                jsonObject.addProperty(Project.PROPERTY_ENDS_PER_INCH, Float.valueOf(et_input.getText().toString()));
+
+                            if (!et_input2.getText().toString().isEmpty())
+                                jsonObject.addProperty(Project.PROPERTY_PICKS_PER_INCH, Float.valueOf(et_input2.getText().toString()));
+
+                            startUploadIntentService(Constants.POST_PROJECT, project.getId(), jsonObject.toString());
+
+                        dialog.dismiss();
+                                }
+                    });
+
+
+
+                }
 
             default:
                 break;
@@ -473,6 +610,16 @@ public class ProjectInfo extends Fragment{
     }
 
 
+    // Weird shit for RavelryAPI quirks in getting the upload token...
+    private void startUploadIntentService(int type){
+
+        Intent intent = new Intent(getActivity(), UploadIntentService_.class);
+        intent.putExtra(Constants.RECEIVER, uploadIntentResultReceiver);
+        intent.putExtra(Constants.POST_TYPE, type);
+        getActivity().startService(intent);
+    }
+
+    // Project update
     private void startUploadIntentService(int type, int id, String string){
 
         Intent intent = new Intent(getActivity(), UploadIntentService_.class);
@@ -480,6 +627,17 @@ public class ProjectInfo extends Fragment{
         intent.putExtra(Constants.POST_TYPE, type);
         intent.putExtra(Constants.PROJECT_ID, id);
         intent.putExtra(Constants.POST_JSON_STRING, string);
+        getActivity().startService(intent);
+    }
+
+    // Image upload
+    private void startUploadIntentService(int type, String token, String file){
+
+        Intent intent = new Intent(getActivity(), UploadIntentService_.class);
+        intent.putExtra(Constants.RECEIVER, uploadIntentResultReceiver);
+        intent.putExtra(Constants.POST_TYPE, type);
+        intent.putExtra(Constants.UPLOAD_TOKEN, token);
+        intent.putExtra(Constants.UPLOAD_PHOTO, file);
         getActivity().startService(intent);
     }
 
@@ -495,24 +653,99 @@ public class ProjectInfo extends Fragment{
             if (resultCode == Constants.SUCCESS_RESULT) {
 
                 Log.d(TAG, "success result");
+                Log.d(TAG, resultData.toString());
 
                 String resultDataString = resultData.getString(Constants.RESULT_DATA_KEY);
                 ObjectMapper mapper = new ObjectMapper();
-                try {
-                    JSONObject jObject = new JSONObject(resultDataString);
-                    String s_project = jObject.get("project").toString();
-                    project = mapper.readValue(s_project, Project.class);
 
-                    if (project != null) {
-                        reloadData();
+                int type = resultData.getInt(Constants.POST_TYPE);
 
-                    } else {
-                        Snackbar.make(rootView, "Whoops, something went wrong somewhere. We couldn't update your project.", Snackbar.LENGTH_SHORT)
-                                .setAction("Action", null).show();
-                    }
+                switch (type) {
 
-                } catch (Exception e) {
-                    Log.d(TAG, e.toString());
+                    case Constants.POST_PROJECT:
+
+                        try {
+                            JSONObject jObject = new JSONObject(resultDataString);
+                            String s_project = jObject.get("project").toString();
+                            project = mapper.readValue(s_project, Project.class);
+
+                            if (project != null) {
+                                reloadData();
+
+                            } else {
+                                Snackbar.make(rootView, "Whoops, something went wrong somewhere. We couldn't update your project.", Snackbar.LENGTH_SHORT)
+                                        .setAction("Action", null).show();
+                            }
+
+                        } catch (Exception e) {
+                            Log.d(TAG, e.toString());
+                        }
+
+                        String errorMessage = resultData.getString(Constants.RESULT_DATA_KEY);
+                        if (errorMessage != null && !errorMessage.isEmpty()) {
+                            final Snackbar snackbar = Snackbar.make(rootView, errorMessage + " Your project was not updated.", Snackbar.LENGTH_INDEFINITE);
+                            snackbar.setAction("OK", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    snackbar.dismiss();
+                                }
+                            });
+                            snackbar.show();
+                        }
+
+                        break;
+
+                    case Constants.POST_UPLOAD_TOKEN:
+
+                        if (resultDataString != null && !resultDataString.isEmpty()) {
+
+                            String[] response = new String[0];
+                            response = resultDataString.split(":");
+                            response[1] = response[1].replace("\"", "");
+                            response[1] = response[1].replace("}", "");
+
+                            uploadToken = response[1];
+                            uploadPhotos();
+                        }
+                        break;
+
+                    case Constants.POST_UPLOAD_PHOTOS:
+
+                        com.eclipsesource.json.JsonObject object = Json.parse(resultDataString).asObject();
+                        imageIds = new ArrayList<>();
+
+                        try {
+
+                            // We can have at most 10 images. Ravelry returns the image IDs as an array
+                            // inside of a "file#" array. (Why not just a bunch of "file" I don't know).
+                            // So, let's try to examine each one by one and store the IDs so we can POST
+                            // them back to the project.
+
+                            com.eclipsesource.json.JsonObject file = object.get("uploads").asObject();
+
+                            for (int i = 0; i < file.size(); i++) {
+                                String fileString = "file" + i;
+                                com.eclipsesource.json.JsonObject image = file.get(fileString).asObject();
+
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty(Project.IMAGE_ID, String.valueOf(image.get(Project.IMAGE_ID).asInt()));
+                                startUploadIntentService(Constants.POST_CREATE_PHOTO, project.getId(), jsonObject.toString());
+                                }
+
+                            uploadToken = "";
+
+                        } catch (Exception e) {
+                            Log.d(TAG, e.toString());
+                            uploadToken = "";
+
+                        }
+
+                        break;
+
+                    case Constants.POST_CREATE_PHOTO:
+                        Log.d(TAG, resultDataString);
+
+                        startDownloadIntentService(Constants.FETCH_PROJECT, project.getId());
                 }
             }
         }
@@ -541,6 +774,15 @@ public class ProjectInfo extends Fragment{
                 s_needleSizes += a_needleSizes.get(i).getName() + ", \n";
         }
 
+        ArrayList<Tools> a_tools = project.getTools();
+        String s_tools = "";
+        for (int i = 0; i < a_tools.size(); i++){
+            if (i == a_tools.size() - 1)
+                s_tools += a_tools.get(i).getMake() + " " + a_tools.get(i).getModel();
+            else
+                s_tools += a_tools.get(i).getMake() + " " + a_tools.get(i).getModel() + ", \n";
+        }
+
         ArrayList<Pack> a_packs = new ArrayList<>();
         a_packs = project.getPack();
         ArrayList<CardData> a_packCards;
@@ -554,10 +796,11 @@ public class ProjectInfo extends Fragment{
 
         if (project.getCraftId() == Project.CRAFT_CROCHET || project.getCraftId() == Project.CRAFT_KNITTING)
             projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_needles_hooks), s_needleSizes, "{fa-wrench}"));
-        else if (project.getCraftId() == Project.CRAFT_WEAVING)
-            projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_loom), project.getTools().getMake() +
-                    " " + project.getTools().getModel(), "{fa-wrench}" ));
-
+        else if (project.getCraftId() == Project.CRAFT_WEAVING) {
+            String epi_ppi = project.getEndsPerInch() + " EPI x " + project.getPicksPerInch() + " PPI";
+            projectItems.add(POSITION_TOOLS, new CardData(getString(R.string.project_loom), s_tools, "{fa-wrench}"));
+            projectItems.add(POSITION_EPI_PPI, new CardData(getString(R.string.project_epi_ppi), epi_ppi, "{fa-wrench}" ));
+        }
 
         for (int i = 0; i < a_packs.size(); i++) {
             String yarnString = "";
@@ -588,6 +831,15 @@ public class ProjectInfo extends Fragment{
         getActivity().startService(intent);
     }
 
+    private void startDownloadIntentService(int type, int id){
+
+        Intent intent = new Intent(getActivity(), DownloadIntentService_.class);
+        intent.putExtra(Constants.RECEIVER, downloadIntentResultReceiver);
+        intent.putExtra(Constants.FETCH_TYPE, type);
+        intent.putExtra(Constants.PROJECT_ID, id);
+        getActivity().startService(intent);
+    }
+
     private class DownloadIntentResultReceiver extends ResultReceiver {
         private DownloadIntentResultReceiver(Handler handler) {
             super(handler);
@@ -596,24 +848,25 @@ public class ProjectInfo extends Fragment{
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
 
-            if (resultCode == Constants.SUCCESS_RESULT){
+            if (resultCode == Constants.SUCCESS_RESULT) {
 
-                int type = resultData.getInt(Constants.FETCH_TYPE);
+                int fetchType = resultData.getInt(Constants.FETCH_TYPE);
                 String resultDataString = resultData.getString(Constants.RESULT_DATA_KEY);
                 ObjectMapper mapper = new ObjectMapper();
 
-                switch (type){
+                switch (fetchType) {
 
                     case Constants.FETCH_NEEDLES_KNITTING:
 
                         try {
                             JSONObject jObject = new JSONObject(resultDataString);
                             String s_needles = jObject.get("needle_sizes").toString();
-                            knittingNeedleSizes = mapper.readValue(s_needles, new  TypeReference<ArrayList<NeedleSizes>>(){});
+                            knittingNeedleSizes = mapper.readValue(s_needles, new TypeReference<ArrayList<NeedleSizes>>() {
+                            });
 
-                            for (NeedleSizes needle : knittingNeedleSizes){
+                            for (NeedleSizes needle : knittingNeedleSizes) {
                                 String displayName;
-                                if (needle.getUs() != null){
+                                if (needle.getUs() != null) {
                                     String name = needle.getUs();
                                     if (name.equals("8/0"))
                                         name = "00000000";
@@ -625,7 +878,7 @@ public class ProjectInfo extends Fragment{
                                         name = "0000";
 
                                     displayName = "US " + name + " - " + needle.getMetric() + " mm";
-                                }else
+                                } else
                                     displayName = needle.getMetric() + " mm";
 
                                 needle.setDisplayName(displayName);
@@ -633,15 +886,17 @@ public class ProjectInfo extends Fragment{
 
                             ArrayList<NeedleSizes> projectSizes = project.getNeedleSizes();
 
-                            for (int i = 0; i < projectSizes.size(); i++){
-                                for (int j = 0; j < knittingNeedleSizes.size(); j++ ){
+                            for (int i = 0; i < projectSizes.size(); i++) {
+                                for (int j = 0; j < knittingNeedleSizes.size(); j++) {
                                     if (projectSizes.get(i).getId() == knittingNeedleSizes.get(j).getId())
                                         knittingNeedleSizes.get(j).setChecked(true);
                                 }
                             }
 
 
-                        }catch (Exception e){}
+                        } catch (Exception e) {
+                            Log.d(TAG, e.toString());
+                        }
 
                         break;
 
@@ -650,11 +905,12 @@ public class ProjectInfo extends Fragment{
                         try {
                             JSONObject jObject = new JSONObject(resultDataString);
                             String s_needles = jObject.get("needle_sizes").toString();
-                            crochetNeedleSizes = mapper.readValue(s_needles, new  TypeReference<ArrayList<NeedleSizes>>(){});
+                            crochetNeedleSizes = mapper.readValue(s_needles, new TypeReference<ArrayList<NeedleSizes>>() {
+                            });
 
-                            for (NeedleSizes needle : crochetNeedleSizes){
+                            for (NeedleSizes needle : crochetNeedleSizes) {
                                 String displayName = needle.getMetric() + " mm";
-                                if (needle.getHook() != null){
+                                if (needle.getHook() != null) {
                                     displayName += " (" + needle.getHook() + ")";
                                 }
                                 needle.setDisplayName(displayName);
@@ -662,18 +918,64 @@ public class ProjectInfo extends Fragment{
 
                             ArrayList<NeedleSizes> projectSizes = project.getNeedleSizes();
 
-                            for (int i = 0; i < projectSizes.size(); i++){
-                                for (int j = 0; j < crochetNeedleSizes.size(); j++ ){
+                            for (int i = 0; i < projectSizes.size(); i++) {
+                                for (int j = 0; j < crochetNeedleSizes.size(); j++) {
                                     if (projectSizes.get(i).getId() == crochetNeedleSizes.get(j).getId())
                                         crochetNeedleSizes.get(j).setChecked(true);
                                 }
                             }
 
-                        }catch (Exception e){ Log.d(TAG, e.toString()); }
+                        } catch (Exception e) {
+                            Log.d(TAG, e.toString());
+                        }
 
                         break;
+
+                    case Constants.FETCH_PROJECT:
+
+                        try {
+                            JSONObject jObject = new JSONObject(resultDataString);
+                            String s_project = jObject.get("project").toString();
+                            Project tempProject = mapper.readValue(s_project, Project.class);
+
+                            if (tempProject != null) {
+                                if (tempProject.getPhotos().size() != project.getPhotos().size())
+                                    ((ProjectActivity) getActivity()).setupSlideshow(tempProject);
+                            }
+
+                            project = tempProject;
+
+                            if (project != null) {
+                                reloadData();
+
+                            } else {
+                                Snackbar.make(rootView, "Whoops, something went wrong somewhere. We couldn't update your project.", Snackbar.LENGTH_SHORT)
+                                        .setAction("Action", null).show();
+                            }
+
+                        } catch (Exception e) {
+                            Log.d(TAG, e.toString());
+                        }
                 }
             }
+
+            else{
+                String errorMessage = resultData.getString(Constants.RESULT_DATA_KEY);
+                if (errorMessage != null && !errorMessage.isEmpty()) {
+                    final Snackbar snackbar = Snackbar.make(rootView, errorMessage + " Your project was not updated.", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("OK", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                        }
+                    });
+                    snackbar.show();
+                }
+
+            }
+
+
         }
     }
+
 }

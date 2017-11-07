@@ -30,7 +30,7 @@ public class RavelryAPI extends DefaultApi10a {
     // PROJECTS
     private static final String PROJECT_LIST = "/projects/%s/list.json";
     private static final String PROJECT = "/projects/%s/%s.json";
-
+    private static final String PHOTO_CREATE = "/projects/%s/%s/create_photo.json";
 
     // PATTERNS
 
@@ -47,6 +47,10 @@ public class RavelryAPI extends DefaultApi10a {
     private static final String STASH_YARN = "/people/%s/stash/%s.json";
     private static final String STASH_FIBER = "/people/%s/fiber/%s.json";
 
+    // UPLOAD
+    private static final String UPLOAD_PHOTO_TOKEN = "/upload/request_token.json";
+    private static final String UPLOAD_PHOTO = "/upload/image.json";
+    private static final String UPLOAD_STATUS = "/upload/image/status.json?%s";
 
 
     protected RavelryAPI() {}
@@ -80,6 +84,8 @@ public class RavelryAPI extends DefaultApi10a {
         return String.format(RAV_API_URL + PROJECT, username, projectId);
     }
 
+    public String getCreatePhoto(String username, int projectId) { return String.format(RAV_API_URL + PHOTO_CREATE, username, projectId); }
+
     // USER
     public String getUser(String username) {
         return String.format(RAV_API_URL + USER, username);
@@ -99,6 +105,13 @@ public class RavelryAPI extends DefaultApi10a {
     public String getStashUnifiedList(String username){ return String.format(RAV_API_URL + STASH_UNIFIED_LIST, username); }
     public String getStashYarn(String username, int stashId) { return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
     public String getStashFiber(String username, int stashId) { return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
+
+    // UPLOAD
+    public String getUploadToken() { return RAV_API_URL + UPLOAD_PHOTO_TOKEN; }
+    public String getUploadPhoto() { return RAV_API_URL + UPLOAD_PHOTO; }
+    public String getUploadStatus() { return RAV_API_URL + UPLOAD_STATUS; }
+
+    // PHOTO
 
 }
 

@@ -8,57 +8,63 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:id="@+id/project_bar"
-        android:background="@color/cardview_dark_background">
+        android:id="@+id/buttonPanel">
 
-        <Button
-            android:id="@+id/add_photo"
-            android:textColor="@color/ravelry_pink"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Add Photos"
-            android:background="@color/cardview_dark_background"/>
-
-        <Button
-            android:id="@+id/edit_yarns"
-            android:textColor="@color/ravelry_pink"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Edit Yarns"
-            android:background="@color/cardview_dark_background"
-            />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/stash_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="@color/cardview_dark_background">
-
-        <Button
-            android:id="@+id/add_stash"
+        <LinearLayout
+            android:id="@+id/project_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/cardview_dark_background"
-            android:text="Add Photos"
-            android:textColor="@color/ravelry_pink" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_photo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/cardview_dark_background"
+                android:text="Add Photos"
+                android:textColor="@color/ravelry_pink" />
+
+            <Button
+                android:id="@+id/edit_yarns"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/cardview_dark_background"
+                android:text="Edit Yarns"
+                android:textColor="@color/ravelry_pink" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/stash_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_dark_background"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_stash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_dark_background"
+                android:text="Add Photos"
+                android:textColor="@color/ravelry_pink" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_above="@id/linearlayout">
+        android:layout_above="@id/buttonPanel">
 
         <RatingBar
             android:id="@+id/ratingBar"
