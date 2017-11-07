@@ -121,7 +121,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
                                 if (actionBar != null)
                                     actionBar.setTitle(project.getName());
 
-                                setupSlideshow();
+                                setupSlideshow(project);
                                 setupProject();
                                 setupPattern();
                                 setupNotes();
@@ -152,12 +152,13 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
             }
         }
     }
-
-    private void setupSlideshow(){
+    // Can be called from child fragment in the event that the images are updated
+    // from the ProjectInfo fragment
+    public void setupSlideshow(Project project){
 
         if (project.getPhotos().size() == 1) {
 
-            setupSlide(0);
+            setupSlide(project, 0);
             slider.stopAutoCycle();
 
 
@@ -165,7 +166,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
         else{
             for (int i = 0; i < project.getPhotos().size(); i++){
 
-                setupSlide(i);
+                setupSlide(project, i);
                 slider.setDuration(4000);
                 slider.setPresetTransformer(SliderLayout.Transformer.Fade);
                 slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -175,7 +176,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
         }
     }
 
-    private void setupSlide(int i){
+    private void setupSlide(Project project, int i){
 
         TextSliderView textSliderView = new TextSliderView(this);
         Photo tempPhoto = project.getPhotos().get(i);

@@ -6,6 +6,7 @@ package com.whitewhiskerstudios.pocketrav.Utils;
 
 public class Constants {
 
+
     //Intent Receiver
     public static final String RECEIVER = "RECEIVER";
     public static final String FETCH_TYPE = "FETCH_TYPE";
@@ -25,10 +26,11 @@ public class Constants {
     // Projects
     public static final String PROJECT_ID = "PROJECT ID";
     public static final String PROJECT_BUNDLE = "PROJECT_BUNDLE";
-
+    public static final String PHOTO_ID = "PHOTO_ID";
     public static final int FETCH_PROJECT_LIST = 1;
     public static final int FETCH_PROJECT = 2;
     public static final int POST_PROJECT = 6;
+    public static final int POST_CREATE_PHOTO = 17;
 
     // User
     public static final int FETCH_USER = 3;
@@ -57,4 +59,13 @@ public class Constants {
     public static final int STASH_TYPE_FIBER = 101;
     public static final int STASH_TYPE_YARN = 102;
     public static final int POST_STASH = 13;
+
+    // Upload
+    public static final String UPLOAD_ID = "UPLOAD_ID";
+    public static final int POST_UPLOAD_TOKEN = 16;
+    public static final int POST_UPLOAD_PHOTOS = 14;
+    public static final String UPLOAD_PHOTO = "UPLOAD_PHOTO";
+    public static final String UPLOAD_TOKEN = "UPLOAD_TOKEN";
+    public static final int FETCH_UPLOAD_PHOTO_STATUS =15;
+
 }
