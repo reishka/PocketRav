@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whitewhiskerstudios.pocketrav.API.Models.Photo;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.Adapters.ViewPagerAdapter;
-import com.whitewhiskerstudios.pocketrav.Fragments.ProjectInfo;
+import com.whitewhiskerstudios.pocketrav.Fragments.ProjectInfo_;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectNotes;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectPattern;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
@@ -48,7 +48,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
     private SliderLayout slider;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private ProjectInfo projectInfoFragment = new ProjectInfo();
+    private ProjectInfo_ projectInfoFragment = new ProjectInfo_();
     private ProjectNotes projectNotesFragment = new ProjectNotes();
     private ProjectPattern projectPatternFragment = new ProjectPattern();
 
@@ -156,6 +156,9 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
     // from the ProjectInfo fragment
     public void setupSlideshow(Project project){
 
+
+        slider.removeAllSliders();
+
         if (project.getPhotos().size() == 1) {
 
             setupSlide(project, 0);
@@ -167,11 +170,13 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
             for (int i = 0; i < project.getPhotos().size(); i++){
 
                 setupSlide(project, i);
-                slider.setDuration(4000);
-                slider.setPresetTransformer(SliderLayout.Transformer.Fade);
+                slider.stopAutoCycle();
+                //slider.setDuration(4000);
+                //slider.setPresetTransformer(SliderLayout.Transformer.Fade);
                 slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 //slider.setCustomAnimation(new DescriptionAnimation());
                 slider.addOnPageChangeListener(this);
+
             }
         }
     }

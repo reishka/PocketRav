@@ -25,8 +25,8 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 
-import static com.whitewhiskerstudios.pocketrav.API.Keys.ACCESS_KEY;
-import static com.whitewhiskerstudios.pocketrav.API.Keys.SECRET_KEY;
+import static com.whitewhiskerstudios.pocketrav.API.Keys.CONSUMER_KEY;
+import static com.whitewhiskerstudios.pocketrav.API.Keys.CONSUMER_SECRET;
 
 @EActivity
 public class AccessTokenActivity extends AppCompatActivity {
@@ -51,8 +51,8 @@ public class AccessTokenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_authorize);
 
         service = new ServiceBuilder()
-                .apiKey(ACCESS_KEY)
-                .apiSecret(SECRET_KEY)
+                .apiKey(CONSUMER_KEY)
+                .apiSecret(CONSUMER_SECRET)
                 .callback(CALLBACK_URL)
                 .build(RavelryAPI.instance());
 

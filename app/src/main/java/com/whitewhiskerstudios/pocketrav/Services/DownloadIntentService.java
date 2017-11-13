@@ -1,6 +1,5 @@
 package com.whitewhiskerstudios.pocketrav.Services;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
@@ -20,8 +19,8 @@ import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
-import static com.whitewhiskerstudios.pocketrav.API.Keys.ACCESS_KEY;
-import static com.whitewhiskerstudios.pocketrav.API.Keys.SECRET_KEY;
+import static com.whitewhiskerstudios.pocketrav.API.Keys.CONSUMER_KEY;
+import static com.whitewhiskerstudios.pocketrav.API.Keys.CONSUMER_SECRET;
 
 /**
  * Created by rachael on 10/6/17.
@@ -62,8 +61,8 @@ public class DownloadIntentService extends RavIntentService {
         }
 
         OAuth10aService service = new ServiceBuilder()
-                .apiKey(ACCESS_KEY)
-                .apiSecret(SECRET_KEY)
+                .apiKey(CONSUMER_KEY)
+                .apiSecret(CONSUMER_SECRET)
                 .build(RavelryAPI.instance());
 
         String apiCall = "";

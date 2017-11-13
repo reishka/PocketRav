@@ -44,6 +44,7 @@ import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.API.Models.Tools;
 import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithFontAwesome;
+import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.DownloadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Services.UploadIntentService_;
@@ -51,8 +52,12 @@ import com.whitewhiskerstudios.pocketrav.Utils.CardData;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -60,8 +65,11 @@ import static android.app.Activity.RESULT_OK;
  * Created by rachael on 10/14/17.
  */
 
-
+@EFragment
 public class ProjectInfo extends Fragment{
+
+    @Pref
+    PocketRavPrefs_ prefs;
 
     private static final String TAG = "Project Info Fragment";
 
@@ -76,7 +84,7 @@ public class ProjectInfo extends Fragment{
     ArrayList<CardData> projectItems;
 
     ArrayList<NeedleSizes> knittingNeedleSizes = new ArrayList<>();
-    ArrayList<NeedleSizes> crochetNeedleSizes = new ArrayList<>();
+    ArrayList<NeedleSizes> crochetHookSizes = new ArrayList<>();
 
     private UploadIntentResultReceiver uploadIntentResultReceiver;
     private DownloadIntentResultReceiver downloadIntentResultReceiver;
@@ -119,47 +127,71 @@ public class ProjectInfo extends Fragment{
             project = (Project) bundle.getSerializable(Constants.PROJECT_BUNDLE);
 
             if (project.getCraftId() == Project.CRAFT_KNITTING || project.getCraftId() == Project.CRAFT_CROCHET) {
-                startDownloadIntentService(Constants.FETCH_NEEDLES_CROCHET);
-                startDownloadIntentService(Constants.FETCH_NEEDLES_KNITTING);
-            }
 
-            initViews();
-            loadData();
 
-            try {
+                ObjectMapper mapper = new ObjectMapper();
 
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-                gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
-                    @Override
-                    public int getSpanSize(int position){
+                try {
 
-                        if (position == POSITION_DATE_STARTED ||
-                                position == POSITION_DATE_FINISHED ||
-                                position == POSITION_MADE_FOR ||
-                                position == POSITION_STATUS ||
-                                position == POSITION_SIZE ||
-                                position == POSITION_TOOLS){
-                            return 1;
-                        }else
-                            return 2;
+                    String knittingJson = prefs.knittingNeedleSizes().get();
+                    String crochetingJson = prefs.crochetHookSizes().get();
+
+                    if (knittingJson == null || knittingJson.isEmpty()) {
+                        startDownloadIntentService(Constants.FETCH_NEEDLES_KNITTING);
+                    } else {
+                        knittingNeedleSizes = mapper.readValue(knittingJson, new TypeReference<ArrayList<NeedleSizes>>() {
+                        });
                     }
-                });
 
-                recyclerView.setLayoutManager(gridLayoutManager);
-
-                recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(projectItems);
-                recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener(){
-                    @Override
-                    public void onItemClick(int position, View v){
-                        Log.i(TAG, " clicked on item at position: " + position);
-                        buildDialog(position);
-                        }
-                });
-
-                recyclerView.setAdapter(recyclerViewAdapter);
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
+                    if (crochetingJson == null || crochetingJson.isEmpty()) {
+                        startDownloadIntentService(Constants.FETCH_NEEDLES_CROCHET);
+                    } else {
+                        crochetHookSizes = mapper.readValue(crochetingJson, new TypeReference<ArrayList<NeedleSizes>>() {
+                        });
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, e.toString());
+                }
             }
+
+                initViews();
+                loadData();
+
+                try {
+
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+                    gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                        @Override
+                        public int getSpanSize(int position) {
+
+                            if (position == POSITION_DATE_STARTED ||
+                                    position == POSITION_DATE_FINISHED ||
+                                    position == POSITION_MADE_FOR ||
+                                    position == POSITION_STATUS ||
+                                    position == POSITION_SIZE ||
+                                    position == POSITION_TOOLS) {
+                                return 1;
+                            } else
+                                return 2;
+                        }
+                    });
+
+                    recyclerView.setLayoutManager(gridLayoutManager);
+
+                    recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(projectItems);
+                    recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener() {
+                        @Override
+                        public void onItemClick(int position, View v) {
+                            Log.i(TAG, " clicked on item at position: " + position);
+                            buildDialog(position);
+                        }
+                    });
+
+                    recyclerView.setAdapter(recyclerViewAdapter);
+                } catch (Exception e) {
+                    Log.d(TAG, e.toString());
+                }
+
         }
     }
 
@@ -415,7 +447,7 @@ public class ProjectInfo extends Fragment{
 
                         JsonObject jsonObject = new JsonObject();
                         String tags = et_input.getText().toString();
-                        String[] a_tags = new String[0];
+                        String[] a_tags = new String[1];
                         JsonArray jsonArray = new JsonArray();
 
                         tags = tags.trim();
@@ -488,12 +520,12 @@ public class ProjectInfo extends Fragment{
                     });
                 } else if (project.getCraftId() == Project.CRAFT_CROCHET) {
 
-                    String[] displayNames = new String[crochetNeedleSizes.size()];
-                    boolean[] checkedStatus = new boolean[crochetNeedleSizes.size()];
+                    String[] displayNames = new String[crochetHookSizes.size()];
+                    boolean[] checkedStatus = new boolean[crochetHookSizes.size()];
 
-                    for (int i = 0; i < crochetNeedleSizes.size(); i++) {
-                        displayNames[i] = crochetNeedleSizes.get(i).getDisplayName();
-                        checkedStatus[i] = crochetNeedleSizes.get(i).getChecked();
+                    for (int i = 0; i < crochetHookSizes.size(); i++) {
+                        displayNames[i] = crochetHookSizes.get(i).getDisplayName();
+                        checkedStatus[i] = crochetHookSizes.get(i).getChecked();
                     }
 
                     builder.setMultiChoiceItems(displayNames, checkedStatus, new DialogInterface.OnMultiChoiceClickListener() {
@@ -502,9 +534,9 @@ public class ProjectInfo extends Fragment{
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
                             if (isChecked) {
-                                crochetNeedleSizes.get(which).setChecked(true);
-                            } else if (crochetNeedleSizes.get(which).getChecked())
-                                crochetNeedleSizes.get(which).setChecked(false);
+                                crochetHookSizes.get(which).setChecked(true);
+                            } else if (crochetHookSizes.get(which).getChecked())
+                                crochetHookSizes.get(which).setChecked(false);
                         }
                     });
                 }else {
@@ -533,9 +565,9 @@ public class ProjectInfo extends Fragment{
                                     }
                                     break;
                                 case Project.CRAFT_CROCHET:
-                                    for (int i = 0; i < crochetNeedleSizes.size(); i++) {
-                                        if (crochetNeedleSizes.get(i).getChecked())
-                                            jsonArray.add(crochetNeedleSizes.get(i).getId());
+                                    for (int i = 0; i < crochetHookSizes.size(); i++) {
+                                        if (crochetHookSizes.get(i).getChecked())
+                                            jsonArray.add(crochetHookSizes.get(i).getId());
                                     }
                                     break;
                             }
@@ -622,6 +654,8 @@ public class ProjectInfo extends Fragment{
     // Project update
     private void startUploadIntentService(int type, int id, String string){
 
+        showUploadDataMessage("Updating your project");
+
         Intent intent = new Intent(getActivity(), UploadIntentService_.class);
         intent.putExtra(Constants.RECEIVER, uploadIntentResultReceiver);
         intent.putExtra(Constants.POST_TYPE, type);
@@ -633,11 +667,24 @@ public class ProjectInfo extends Fragment{
     // Image upload
     private void startUploadIntentService(int type, String token, String file){
 
+        showUploadDataMessage("Uploading your image...");
+
         Intent intent = new Intent(getActivity(), UploadIntentService_.class);
         intent.putExtra(Constants.RECEIVER, uploadIntentResultReceiver);
         intent.putExtra(Constants.POST_TYPE, type);
         intent.putExtra(Constants.UPLOAD_TOKEN, token);
         intent.putExtra(Constants.UPLOAD_PHOTO, file);
+        getActivity().startService(intent);
+    }
+
+    // Associating image with a project
+    private void startUploadIntentService(int type, int projectId, int photoId){
+
+        Intent intent = new Intent(getActivity(), UploadIntentService_.class);
+        intent.putExtra(Constants.RECEIVER, uploadIntentResultReceiver);
+        intent.putExtra(Constants.POST_TYPE, type);
+        intent.putExtra(Constants.PROJECT_ID, projectId);
+        intent.putExtra(Constants.PHOTO_ID, photoId);
         getActivity().startService(intent);
     }
 
@@ -681,18 +728,6 @@ public class ProjectInfo extends Fragment{
                             Log.d(TAG, e.toString());
                         }
 
-                        String errorMessage = resultData.getString(Constants.RESULT_DATA_KEY);
-                        if (errorMessage != null && !errorMessage.isEmpty()) {
-                            final Snackbar snackbar = Snackbar.make(rootView, errorMessage + " Your project was not updated.", Snackbar.LENGTH_INDEFINITE);
-                            snackbar.setAction("OK", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    snackbar.dismiss();
-                                }
-                            });
-                            snackbar.show();
-                        }
-
                         break;
 
                     case Constants.POST_UPLOAD_TOKEN:
@@ -712,24 +747,25 @@ public class ProjectInfo extends Fragment{
                     case Constants.POST_UPLOAD_PHOTOS:
 
                         com.eclipsesource.json.JsonObject object = Json.parse(resultDataString).asObject();
-                        imageIds = new ArrayList<>();
+                        //imageIds = new ArrayList<>();
 
                         try {
 
                             // We can have at most 10 images. Ravelry returns the image IDs as an array
-                            // inside of a "file#" array. (Why not just a bunch of "file" I don't know).
-                            // So, let's try to examine each one by one and store the IDs so we can POST
-                            // them back to the project.
+                            // inside of a "file#" array. So, let's try to examine each one by one and
+                            // store the IDs so we can POST them back to the project.
+
+                            // Currently, we only allow the user to upload one image at a time. Maybe
+                            // in the future we can consider multiple image upload.
 
                             com.eclipsesource.json.JsonObject file = object.get("uploads").asObject();
 
                             for (int i = 0; i < file.size(); i++) {
                                 String fileString = "file" + i;
                                 com.eclipsesource.json.JsonObject image = file.get(fileString).asObject();
+                                int imageId = image.get("image_id").asInt();
 
-                                JsonObject jsonObject = new JsonObject();
-                                jsonObject.addProperty(Project.IMAGE_ID, String.valueOf(image.get(Project.IMAGE_ID).asInt()));
-                                startUploadIntentService(Constants.POST_CREATE_PHOTO, project.getId(), jsonObject.toString());
+                                startUploadIntentService(Constants.POST_CREATE_PHOTO, project.getId(), imageId);
                                 }
 
                             uploadToken = "";
@@ -745,7 +781,28 @@ public class ProjectInfo extends Fragment{
                     case Constants.POST_CREATE_PHOTO:
                         Log.d(TAG, resultDataString);
 
-                        startDownloadIntentService(Constants.FETCH_PROJECT, project.getId());
+                        showUploadDataMessage("Waiting for the server to process your uploaded image.");
+
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                // this code will be executed after 15 seconds
+                                startDownloadIntentService(Constants.FETCH_PROJECT, project.getId());
+                            }
+                        }, 15000);
+                }
+            }
+            else{
+                String errorMessage = resultData.getString(Constants.RESULT_DATA_KEY);
+                if (errorMessage != null && !errorMessage.isEmpty()) {
+                    final Snackbar snackbar = Snackbar.make(rootView, errorMessage + " Your project was not updated.", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("OK", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                        }
+                    });
+                    snackbar.show();
                 }
             }
         }
@@ -814,16 +871,31 @@ public class ProjectInfo extends Fragment{
         }
     }
 
+    private void showUploadDataMessage(String message){
+
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show();
+    }
+
+    private void showDownloadDataMessage(){
+
+        Snackbar.make(rootView, "Downloading data.", Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show();
+
+    }
 
     private void reloadData() {
 
         loadData();
+
         recyclerViewAdapter.updateList(projectItems);
         Snackbar.make(rootView, "Project updated successfully.", Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
     }
 
     private void startDownloadIntentService(int type){
+
+        showDownloadDataMessage();
 
         Intent intent = new Intent(getActivity(), DownloadIntentService_.class);
         intent.putExtra(Constants.RECEIVER, downloadIntentResultReceiver);
@@ -832,6 +904,8 @@ public class ProjectInfo extends Fragment{
     }
 
     private void startDownloadIntentService(int type, int id){
+
+        showDownloadDataMessage();
 
         Intent intent = new Intent(getActivity(), DownloadIntentService_.class);
         intent.putExtra(Constants.RECEIVER, downloadIntentResultReceiver);
@@ -884,6 +958,12 @@ public class ProjectInfo extends Fragment{
                                 needle.setDisplayName(displayName);
                             }
 
+
+                            Gson gson = new Gson();
+                            String json_knitting = gson.toJson(knittingNeedleSizes);
+                            prefs.knittingNeedleSizes().put(json_knitting);
+
+
                             ArrayList<NeedleSizes> projectSizes = project.getNeedleSizes();
 
                             for (int i = 0; i < projectSizes.size(); i++) {
@@ -905,10 +985,10 @@ public class ProjectInfo extends Fragment{
                         try {
                             JSONObject jObject = new JSONObject(resultDataString);
                             String s_needles = jObject.get("needle_sizes").toString();
-                            crochetNeedleSizes = mapper.readValue(s_needles, new TypeReference<ArrayList<NeedleSizes>>() {
+                            crochetHookSizes = mapper.readValue(s_needles, new TypeReference<ArrayList<NeedleSizes>>() {
                             });
 
-                            for (NeedleSizes needle : crochetNeedleSizes) {
+                            for (NeedleSizes needle : crochetHookSizes) {
                                 String displayName = needle.getMetric() + " mm";
                                 if (needle.getHook() != null) {
                                     displayName += " (" + needle.getHook() + ")";
@@ -916,12 +996,16 @@ public class ProjectInfo extends Fragment{
                                 needle.setDisplayName(displayName);
                             }
 
+                            Gson gson = new Gson();
+                            String json_crochet = gson.toJson(crochetHookSizes);
+                            prefs.crochetHookSizes().put(json_crochet);
+
                             ArrayList<NeedleSizes> projectSizes = project.getNeedleSizes();
 
                             for (int i = 0; i < projectSizes.size(); i++) {
-                                for (int j = 0; j < crochetNeedleSizes.size(); j++) {
-                                    if (projectSizes.get(i).getId() == crochetNeedleSizes.get(j).getId())
-                                        crochetNeedleSizes.get(j).setChecked(true);
+                                for (int j = 0; j < crochetHookSizes.size(); j++) {
+                                    if (projectSizes.get(i).getId() == crochetHookSizes.get(j).getId())
+                                        crochetHookSizes.get(j).setChecked(true);
                                 }
                             }
 
@@ -962,6 +1046,7 @@ public class ProjectInfo extends Fragment{
             else{
                 String errorMessage = resultData.getString(Constants.RESULT_DATA_KEY);
                 if (errorMessage != null && !errorMessage.isEmpty()) {
+
                     final Snackbar snackbar = Snackbar.make(rootView, errorMessage + " Your project was not updated.", Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction("OK", new View.OnClickListener() {
                         @Override

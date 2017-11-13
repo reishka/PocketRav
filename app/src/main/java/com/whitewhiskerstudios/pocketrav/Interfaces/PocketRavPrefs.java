@@ -20,5 +20,9 @@ public interface PocketRavPrefs {
 
     String project();
 
+    String knittingNeedleSizes();
+
+    String crochetHookSizes();
+
 
 }
