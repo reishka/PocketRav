@@ -5,11 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.provider.ContactsContract;
-import android.util.Base64;
 import android.util.Log;
 
-import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -19,28 +16,27 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 
 
 import com.google.gson.Gson;
+import com.whitewhiskerstudios.pocketrav.API.Keys;
 import com.whitewhiskerstudios.pocketrav.API.RavelryAPI;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
 
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
-
-
+import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
-import static com.whitewhiskerstudios.pocketrav.API.Keys.ACCESS_KEY;
-import static com.whitewhiskerstudios.pocketrav.API.Keys.SECRET_KEY;
+import static com.whitewhiskerstudios.pocketrav.API.Keys.CONSUMER_KEY;
+import static com.whitewhiskerstudios.pocketrav.API.Keys.CONSUMER_SECRET;
 
 /**
  * Created by rachael on 10/23/17.
@@ -52,13 +48,14 @@ public class UploadIntentService extends RavIntentService{
     @Pref
     PocketRavPrefs_ prefs;
 
-
     private static final String TAG = "UploadIntentService";
     private ResultReceiver resultReceiver;
 
     private String responseBody = null;
     private int responseCode = -1;
     int postType = -1;
+
+    public final static boolean DEBUG = false;
 
     public UploadIntentService() {
         super(TAG);
@@ -83,9 +80,9 @@ public class UploadIntentService extends RavIntentService{
         }
 
         OAuth10aService service = new ServiceBuilder()
-                .apiKey(ACCESS_KEY)
-                .apiSecret(SECRET_KEY)
-                .debug()
+                .apiKey(CONSUMER_KEY)
+                .apiSecret(CONSUMER_SECRET)
+                //.debug()
                 .build(RavelryAPI.instance());
 
 
@@ -148,11 +145,12 @@ public class UploadIntentService extends RavIntentService{
 
             case Constants.POST_CREATE_PHOTO:
 
-                dataString = intent.getStringExtra(Constants.POST_JSON_STRING);
+                //dataString = intent.getStringExtra(Constants.POST_JSON_STRING);
                 projectId =  intent.getIntExtra(Constants.PROJECT_ID, -1);
+                int imageId = intent.getIntExtra(Constants.PHOTO_ID, -1);
 
-                if (projectId != -1){
-                    apiCall = RavelryAPI.instance().getCreatePhoto(username, projectId);
+                if (projectId != -1 && imageId != -1){
+                    apiCall = RavelryAPI.instance().getCreatePhoto(username, projectId, imageId);
                 }
 
             default:
@@ -169,57 +167,123 @@ public class UploadIntentService extends RavIntentService{
                 errorMessage = "Could not create the API call";
             }
 
-        }else{
+        }else {
 
             // Do the actual work of making the API call
             try {
                 oAuthRequest = new OAuthRequest(Verb.POST, apiCall);
-                if (!dataString.isEmpty())
-                    oAuthRequest.addBodyParameter("data", dataString);
 
-                else if (!image.isEmpty()){
+                // Add Body Parameters for the requests that need it
 
-                    MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                if (!image.isEmpty()){
+
+                    //MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
                     //MultipartEntity multipartEntity = new MultipartEntity();
 
                     // Image uploading succeeds, but processing fails. Rav docs say most common cause is
                     // bad filetype...?
-                    multipartEntity.addPart("upload_token", new StringBody(uploadToken));
-                    multipartEntity.addPart("access_key", new StringBody(accessToken.getTokenSecret()));
+                    // Posted on rav to see if there is a reason why all image processing is failing.
 
-                    //File imageFile = new File(image);
+                    Log.d(TAG, "image: " + image );
 
-                    File file = new File(getApplication().getCacheDir(), "temp_image");
-                    file.createNewFile();
+                    //Uri uri = Uri.parse(image);
+                    File imageFile = new File(image);
 
-                    Bitmap bitmap = BitmapFactory.decodeFile(image);
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos);
-                    byte[] bitmapdata = bos.toByteArray();
+                    StringBody multipartUploadToken = new StringBody(uploadToken);
+                    StringBody multipartAccessKey = new StringBody(accessToken.getTokenSecret());
+                    //FileBody multipartFile0 = new FileBody(imageFile);
 
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    Bitmap bm = BitmapFactory.decodeFile(image);
+                    bm.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+                    byte[] byteImage_photo = baos.toByteArray();
+
+                    Log.i("BM Size:", " Byte Count: " + bm.getByteCount());
+                    Log.i("baos Size:", " Size: " + baos.size());
+                    Log.i("Byte Image photo:", " Image photo Size: "
+                            + byteImage_photo.length);
 
 
-                    multipartEntity.addPart("file0", new FileBody(file));
+                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    //builder.addTextBody("access_key", accessToken.getTokenSecret());
+                    builder.addTextBody("access_key", Keys.CONSUMER_KEY);
+                    //builder.addTextBody("access_key", accessToken.getToken());
+                    builder.addTextBody("upload_token", uploadToken);
+                    builder.addBinaryBody("file0", byteImage_photo, ContentType.create("image/jpeg"), imageFile.getName());
+
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost(apiCall);
+                    httpPost.setEntity(builder.build());
 
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    multipartEntity.writeTo(outputStream);
+                    httpPost.getEntity().writeTo(outputStream);
 
-                    oAuthRequest.setPayload(outputStream.toByteArray());
-                    oAuthRequest.addHeader(multipartEntity.getContentType().getName(), multipartEntity.getContentType().getValue());
                     Log.d(TAG, outputStream.toString());
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                    httpClient.getConnectionManager().shutdown();
+
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+                    httpEntity.writeTo(bytes);
+
+                    responseBody = bytes.toString();
+                    responseCode = httpResponse.getStatusLine().getStatusCode();
+
+                    //FileInputStream fis = new FileInputStream(imageFile);
+                    //Bitmap bitmap = BitmapFactory.decodeStream(fis);
+                    //ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    //bitmap.compress(Bitmap.CompressFormat.PNG, 25, baos);
+                    //byte[] b = baos.toByteArray();
+
+                    //ByteArrayBody multipartFile0 = new ByteArrayBody(b, "image/png", "upload.png");
+
+
+                    //multipartEntity.addPart("access_key", multipartAccessKey);
+                    //multipartEntity.addPart("upload_token", multipartUploadToken);
+                    //multipartEntity.addPart("file0", multipartFile0);
+
+                    //FileInputStream fis = new FileInputStream(imageFile);       // imageFile = my file path
+                    //DataInputStream in = new DataInputStream(fis);
+                    //BufferedReader br =
+                    //        new BufferedReader(new InputStreamReader(in));
+                    //String strLine = "";
+                    //String binData = "";
+                    //while ((strLine = br.readLine()) != null) {
+                    //    binData = binData + strLine;
+                    //}
+                    //in.close();
+
+                    //ByteArrayBody multipartFile0 = new ByteArrayBody(binData.getBytes(), imageFile.getName());
+
+                    //multipartEntity.addPart("file0", multipartFile0);
+
+                    //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    //multipartEntity.writeTo(outputStream);
+
+
+
+                    //oAuthRequest.addHeader(multipartEntity.getContentType().getName(), multipartEntity.getContentType().getValue());
+                    //oAuthRequest.setPayload(outputStream.toByteArray());
+
+                    //Log.d(TAG, outputStream.toString());
+
+
+                } else {
+
+                    if (!dataString.isEmpty())
+                        oAuthRequest.addBodyParameter("data", dataString);
+
+                    service.signRequest(accessToken, oAuthRequest);
+                    final Response response = service.execute(oAuthRequest);
+                    responseBody = response.getBody();
+                    responseCode = response.getCode();
                 }
 
-
-                service.signRequest(accessToken, oAuthRequest);
-                final Response response = service.execute(oAuthRequest);
-                responseBody = response.getBody();
-                responseCode = response.getCode();
-
-                Log.e(TAG, responseBody);
+                Log.d(TAG, responseBody);
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());

@@ -70,4 +70,5 @@ dependencies {
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'    // Multipart for image uploads
     compile('org.apache.httpcomponents:httpmime:4.3.6') { exclude module: 'httpclient' }            // Multipart for image uploads
 
+
 }

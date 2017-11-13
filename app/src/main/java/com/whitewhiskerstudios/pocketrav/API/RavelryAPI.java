@@ -8,6 +8,7 @@ import com.github.scribejava.core.builder.api.DefaultApi20;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
+import com.whitewhiskerstudios.pocketrav.Services.UploadIntentService;
 
 import org.json.JSONObject;
 
@@ -24,13 +25,15 @@ public class RavelryAPI extends DefaultApi10a {
     private static final String CALLBACK_URL = "x-oauthflow://com.whitewhiskerstudios.pocketrav";
     private static final String RAV_API_URL = "https://api.ravelry.com";
 
+    private static final String DEBUG_HOOKBIN_URL = "https://hookb.in/Kb824Rbx";
+
     // USER
     private static final String USER = "/people/%s.json";
 
     // PROJECTS
     private static final String PROJECT_LIST = "/projects/%s/list.json";
     private static final String PROJECT = "/projects/%s/%s.json";
-    private static final String PHOTO_CREATE = "/projects/%s/%s/create_photo.json";
+    private static final String PHOTO_CREATE = "/projects/%s/%s/create_photo.json?image_id=%s";
 
     // PATTERNS
 
@@ -84,7 +87,7 @@ public class RavelryAPI extends DefaultApi10a {
         return String.format(RAV_API_URL + PROJECT, username, projectId);
     }
 
-    public String getCreatePhoto(String username, int projectId) { return String.format(RAV_API_URL + PHOTO_CREATE, username, projectId); }
+    public String getCreatePhoto(String username, int projectId, int photoId) { return String.format(RAV_API_URL + PHOTO_CREATE, username, projectId, photoId); }
 
     // USER
     public String getUser(String username) {
@@ -108,7 +111,14 @@ public class RavelryAPI extends DefaultApi10a {
 
     // UPLOAD
     public String getUploadToken() { return RAV_API_URL + UPLOAD_PHOTO_TOKEN; }
-    public String getUploadPhoto() { return RAV_API_URL + UPLOAD_PHOTO; }
+    public String getUploadPhoto() {
+
+        if (!UploadIntentService.DEBUG)
+            return RAV_API_URL + UPLOAD_PHOTO;
+        else
+            return DEBUG_HOOKBIN_URL;
+    }
+
     public String getUploadStatus() { return RAV_API_URL + UPLOAD_STATUS; }
 
     // PHOTO
