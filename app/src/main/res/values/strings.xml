@@ -39,5 +39,22 @@
     <string name="project_size">Size:</string>
     <string name="project_needles_hooks">Needles/Hooks:</string>
     <string name="project_loom">Loom:</string>
-    <string name="project_epi_ppi">EPI/PPI</string>
+    <string name="project_epi_ppi">EPI/PPI:</string>
+
+    <!-- Stash -->
+    <string name="stash_color_family">Color Family:</string>
+    <string name="stash_status">Status:</string>
+    <string name="stash_handspun">Handspun:</string>
+    <string name="stash_location">Location Stored:</string>
+    <string name="stash_fiber_company">Fiber Company:</string>
+    <string name="stash_colorway">Colorway:</string>
+    <string name="stash_tool_sizes">Tool Sizes:</string>
+    <string name="stash_weight_name">Yarn Weight:</string>
+    <string name="stash_yarn_company">Yarn Company:</string>
+    <string name="stash_amount">Amount stashed: </string>
+    <string name="stash_remaining">Amount remaining: </string>
+    <string name="stash_project">Used in project: </string>
+    <string name="stash_project_used">Amount Used in project: </string>
+
+
 </resources>

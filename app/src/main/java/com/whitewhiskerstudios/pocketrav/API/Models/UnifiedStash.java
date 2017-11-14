@@ -12,17 +12,17 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UnifiedStash implements Serializable {
 
-    @JsonProperty("stash")          private YarnStash yarnStash;
-    @JsonProperty("fiber_stash")    private FiberStash fiberStash;
+    @JsonProperty("stash")          private Stash yarnStash;
+    @JsonProperty("fiber_stash")    private Stash stash;
 
     public UnifiedStash(){}
 
-    public FiberStash getFiberStash() {
-        return fiberStash;
-    }
+    public Stash getStash() {
 
-    public YarnStash getYarnStash() {
-        return yarnStash;
+        if (stash != null)
+            return stash;
+        else
+            return yarnStash;
     }
 
     public Boolean isYarn(){
@@ -30,7 +30,7 @@ public class UnifiedStash implements Serializable {
     }
 
     public Boolean isFiber(){
-        return !(fiberStash==null);
+        return !(stash ==null);
     }
 
 }

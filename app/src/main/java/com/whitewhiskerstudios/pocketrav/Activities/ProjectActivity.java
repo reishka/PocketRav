@@ -246,4 +246,9 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
     @Override
     public void onPageScrollStateChanged(int state) {}
 
+    @Override
+    public void onBackPressed(){
+        finish();
+    }
+
 }

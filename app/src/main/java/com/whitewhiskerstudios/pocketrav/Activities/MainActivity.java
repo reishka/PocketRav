@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frame_layout, cardViewProjectFragment);
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.addToBackStack(null);
 
             fragmentTransaction.commit();
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frame_layout, cardViewStashFragment);
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.addToBackStack(null);
 
             fragmentTransaction.commit();
 

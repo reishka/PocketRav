@@ -16,10 +16,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whitewhiskerstudios.pocketrav.API.Models.FiberStash;
+import com.whitewhiskerstudios.pocketrav.API.Models.Stash;
 import com.whitewhiskerstudios.pocketrav.API.Models.Photo;
-import com.whitewhiskerstudios.pocketrav.API.Models.Project;
-import com.whitewhiskerstudios.pocketrav.API.Models.YarnStash;
 import com.whitewhiskerstudios.pocketrav.Adapters.ViewPagerAdapter;
 import com.whitewhiskerstudios.pocketrav.Fragments.StashInfo;
 import com.whitewhiskerstudios.pocketrav.Fragments.StashNotes;
@@ -50,8 +48,8 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
     private SliderLayout slider;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private FiberStash fiberStash;
-    private YarnStash yarnStash;
+    private Stash stash;
+    private int stashType = -1;
 
 
     private StashInfo stashInfoFragment = new StashInfo();
@@ -124,17 +122,18 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
                         try {
                             JSONObject jObject = new JSONObject(resultDataString);
                             String s_project = jObject.get("stash").toString();
-                            yarnStash = mapper.readValue(s_project, YarnStash.class);
+                            stash = mapper.readValue(s_project, Stash.class);
 
-                            if (yarnStash != null) {
+                            if (stash != null) {
 
                                 final ActionBar actionBar = getSupportActionBar();
                                 if (actionBar != null)
-                                    actionBar.setTitle(yarnStash.getName());
+                                    actionBar.setTitle(stash.getName());
 
-                                setupSlideshow(yarnStash.getPhotos());
-                                setupStash(yarnStash);
-                                setupNotes(yarnStash);
+                                stashType = Constants.STASH_TYPE_YARN;
+                                setupSlideshow(stash);
+                                setupStash(stash);
+                                setupNotes(stash);
                                 setupTabs();
                             }
 
@@ -150,17 +149,18 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
                         try {
                             JSONObject jObject = new JSONObject(resultDataString);
                             String s_project = jObject.get("fiber_stash").toString();
-                            fiberStash = mapper.readValue(s_project, FiberStash.class);
+                            stash = mapper.readValue(s_project, Stash.class);
 
-                            if (fiberStash != null) {
+                            if (stash != null) {
 
                                 final ActionBar actionBar = getSupportActionBar();
                                 if (actionBar != null)
-                                    actionBar.setTitle(fiberStash.getName());
+                                    actionBar.setTitle(stash.getName());
 
-                                setupSlideshow(fiberStash.getPhotos());
-                                setupStash(fiberStash);
-                                setupNotes(fiberStash);
+                                stashType = Constants.STASH_TYPE_FIBER;
+                                setupSlideshow(stash);
+                                setupStash(stash);
+                                setupNotes(stash);
                                 setupTabs();
                             }
 
@@ -171,65 +171,47 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
 
                         break;
                 }
-
-
-
-
-
             }
         }
     }
 
-
-
-    private void setupNotes(FiberStash fiberStash){
+    private void setupNotes(Stash stash){
 
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.NOTES_BUNDLE, fiberStash.getNotes());
-        bundle.putInt(Constants.STASH_TYPE, Constants.STASH_TYPE_FIBER);
-        bundle.putInt(Constants.STASH_ID, fiberStash.getId());
+
+        if (stash.hasNotes())
+            bundle.putString(Constants.NOTES_BUNDLE, stash.getNotes());
+        else
+            bundle.putString(Constants.NOTES_BUNDLE, "");
+        bundle.putInt(Constants.STASH_TYPE, stashType);
+        bundle.putInt(Constants.STASH_ID, stash.getId());
         stashNotesFragment.setArguments(bundle);
     }
 
-    private void setupNotes(YarnStash yarnStash){
+    private void setupStash(Stash stash){
 
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.NOTES_BUNDLE, yarnStash.getNotes());
-        bundle.putInt(Constants.STASH_TYPE, Constants.STASH_TYPE_YARN);
-        bundle.putInt(Constants.STASH_ID, yarnStash.getId());
-        stashNotesFragment.setArguments(bundle);
-    }
-
-    private void setupStash(FiberStash fiberStash){
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.STASH_BUNDLE, fiberStash);
+        bundle.putSerializable(Constants.STASH_BUNDLE, stash);
+        bundle.putInt(Constants.STASH_TYPE, stashType);
         stashInfoFragment.setArguments(bundle);
     }
 
-    private void setupStash(YarnStash yarnStash){
+    public void setupSlideshow(Stash stash){
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.STASH_BUNDLE, yarnStash);
-        stashInfoFragment.setArguments(bundle);
-    }
+        slider.removeAllSliders();
 
+        if (stash.getPhotos().size() == 1) {
 
-    private void setupSlideshow(ArrayList<Photo> stashPhotos){
-
-        if (stashPhotos.size() == 1) {
-
-            setupSlide(0, stashPhotos);
+            setupSlide(stash, 0);
             slider.stopAutoCycle();
-
-
         }
         else{
-            for (int i = 0; i < stashPhotos.size(); i++){
+            for (int i = 0; i < stash.getPhotos().size(); i++){
 
-                setupSlide(i, stashPhotos);
-                slider.setDuration(4000);
-                slider.setPresetTransformer(SliderLayout.Transformer.Fade);
+                setupSlide(stash, i);
+                slider.stopAutoCycle();
+                //slider.setDuration(4000);
+                //slider.setPresetTransformer(SliderLayout.Transformer.Fade);
                 slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 //slider.setCustomAnimation(new DescriptionAnimation());
                 slider.addOnPageChangeListener(this);
@@ -239,10 +221,10 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
 
 
 
-    private void setupSlide(int i, ArrayList<Photo> photos){
+    private void setupSlide(Stash stash, int i){
 
         TextSliderView textSliderView = new TextSliderView(this);
-        Photo tempPhoto = photos.get(i);
+        Photo tempPhoto = stash.getPhotos().get(i);
 
 
         textSliderView
@@ -278,4 +260,9 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
 
     @Override
     public void onPageScrollStateChanged(int state) {}
+
+    @Override
+    public void onBackPressed(){
+        finish();
+    }
 }

@@ -14,4 +14,14 @@ public class StashStatus implements Serializable{
 
     @JsonProperty("id")     private int id;
     @JsonProperty("name")   private String name;
+
+    public StashStatus(){}
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

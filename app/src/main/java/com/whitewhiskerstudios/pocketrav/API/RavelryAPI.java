@@ -106,8 +106,8 @@ public class RavelryAPI extends DefaultApi10a {
     public String getStashList(String username){ return String.format(RAV_API_URL + STASH_LIST, username); }
     public String getStashList(String username, String sort){ return String.format(RAV_API_URL + STASH_LIST_SORTED, username, sort); }
     public String getStashUnifiedList(String username){ return String.format(RAV_API_URL + STASH_UNIFIED_LIST, username); }
-    public String getStashYarn(String username, int stashId) { return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
-    public String getStashFiber(String username, int stashId) { return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
+    public String getStashYarn(String username, int stashId) { Log.d(TAG, String.valueOf(stashId)); return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
+    public String getStashFiber(String username, int stashId) { Log.d(TAG, String.valueOf(stashId)); return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
 
     // UPLOAD
     public String getUploadToken() { return RAV_API_URL + UPLOAD_PHOTO_TOKEN; }
