@@ -249,7 +249,7 @@ public class ProjectInfo extends Fragment{
         LinearLayout recyclerViewParent = (LinearLayout) recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
 
-        Button cameraButton = rootView.findViewById(R.id.add_photo);
+        Button cameraButton = rootView.findViewById(R.id.add_yarn_photo);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -790,10 +790,10 @@ public class ProjectInfo extends Fragment{
                         new Timer().schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                // this code will be executed after 15 seconds
+                                // this code will be executed after 7 seconds
                                 startDownloadIntentService(Constants.FETCH_PROJECT, project.getId());
                             }
-                        }, 15000);
+                        }, 7000);
                 }
             }
             else{

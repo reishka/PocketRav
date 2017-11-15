@@ -178,12 +178,6 @@ public class StashInfo extends Fragment {
         }
     }
 
-    private void init(){
-
-
-
-    }
-
     private void initViews(){
 
         // Disable the following, since they only apply to projects and not to stashes
@@ -200,7 +194,9 @@ public class StashInfo extends Fragment {
         LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
 
-        Button cameraButton = rootView.findViewById(R.id.add_photo);
+        Button cameraButton = rootView.findViewById(R.id.add_stash_photo);
+        cameraButton.setVisibility(View.VISIBLE);
+
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,7 +309,7 @@ public class StashInfo extends Fragment {
                                 com.eclipsesource.json.JsonObject image = file.get(fileString).asObject();
                                 int imageId = image.get("image_id").asInt();
 
-                                startUploadIntentService(Constants.POST_CREATE_PHOTO, stash.getId(), imageId);
+                                startUploadIntentService(Constants.POST_CREATE_PHOTO_STASH, stashType, stash.getId(), imageId);
                             }
 
                             uploadToken = "";
@@ -326,7 +322,7 @@ public class StashInfo extends Fragment {
 
                         break;
 
-                    case Constants.POST_CREATE_PHOTO:
+                    case Constants.POST_CREATE_PHOTO_STASH:
                         Log.d(TAG, resultDataString);
 
                         showUploadDataMessage("Waiting for the server to process your uploaded image.");
@@ -334,13 +330,13 @@ public class StashInfo extends Fragment {
                         new Timer().schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                // this code will be executed after 15 seconds
+                                // this code will be executed after 7 seconds
                                 if (stashType == Constants.STASH_TYPE_YARN)
                                     startDownloadIntentService(Constants.FETCH_STASH_YARN, stashType, stash.getId());
                                 else
                                     startDownloadIntentService(Constants.FETCH_STASH_FIBER, stashType, stash.getId());
                             }
-                        }, 15000);
+                        }, 7000);
 
                         break;
 
@@ -495,11 +491,12 @@ public class StashInfo extends Fragment {
     }
 
     // Associating image with a stash
-    private void startUploadIntentService(int type, int stashId, int photoId){
+    private void startUploadIntentService(int type, int stashType, int stashId, int photoId){
 
         Intent intent = new Intent(getActivity(), UploadIntentService_.class);
         intent.putExtra(Constants.RECEIVER, uploadIntentResultReceiver);
         intent.putExtra(Constants.POST_TYPE, type);
+        intent.putExtra(Constants.STASH_TYPE, stashType);
         intent.putExtra(Constants.STASH_ID, stashId);
         intent.putExtra(Constants.PHOTO_ID, photoId);
         getActivity().startService(intent);
@@ -655,7 +652,7 @@ public class StashInfo extends Fragment {
         // If we don't recreate it, it doesn't die with any fragments we create after this one
         // (Like Project Info fragment) -- it persists! It really should end when the
         // fragment/activity lifecycle ends...
-        
+
         recyclerViewAdapter = null;
         recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(stashItems, getActivity());
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener(){
