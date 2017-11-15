@@ -29,7 +29,10 @@ import com.eclipsesource.json.Json;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.whitewhiskerstudios.pocketrav.API.Models.Pack;
+import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.API.Models.Stash;
+import com.whitewhiskerstudios.pocketrav.Activities.ProjectActivity_;
 import com.whitewhiskerstudios.pocketrav.Activities.StashActivity;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithFontAwesome;
 import com.whitewhiskerstudios.pocketrav.Interfaces.PocketRavPrefs_;
@@ -79,7 +82,6 @@ public class StashInfo extends Fragment {
     String uploadToken = "";
     Uri selectedImage = null;
     String imagePath = "";
-    ArrayList<String> imageIds = null;
 
     // Yarn Stash
     private static final int POSITION_YARNSTASH_COMPANY = 0;
@@ -121,6 +123,7 @@ public class StashInfo extends Fragment {
         uploadIntentResultReceiver = new UploadIntentResultReceiver(new Handler());
         downloadIntentResultReceiver = new DownloadIntentResultReceiver(new Handler());
 
+
         if (bundle != null) {
             stashType = bundle.getInt(Constants.STASH_TYPE); // We need to know this for POST, since rav has different methods for stash/yarn_stash
             stash = (Stash) bundle.getSerializable(Constants.STASH_BUNDLE);
@@ -151,20 +154,34 @@ public class StashInfo extends Fragment {
 
                 recyclerView.setLayoutManager(gridLayoutManager);
 
-                recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(stashItems);
+                recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(stashItems, getActivity());
                 recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener(){
                     @Override
                     public void onItemClick(int position, View v){
                         Log.i(TAG, " clicked on item at position: " + position);
+
+                        if (stashItems.get(position).getMainId() != 0) {
+                            Intent intent = new Intent(getActivity(), ProjectActivity_.class);
+                            intent.putExtra(Constants.PROJECT_ID, stashItems.get(position).getMainId());
+                            startActivity(intent);
+                        }
+
                         //buildDialog(position);
                     }
                 });
 
                 recyclerView.setAdapter(recyclerViewAdapter);
+
             } catch (Exception e) {
                 Log.d(TAG, e.toString());
             }
         }
+    }
+
+    private void init(){
+
+
+
     }
 
     private void initViews(){
@@ -179,11 +196,9 @@ public class StashInfo extends Fragment {
         LinearLayout project_bar = (LinearLayout)rootView.findViewById(R.id.project_bar);
         project_bar.setVisibility(View.GONE);
 
-
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
         LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
-
 
         Button cameraButton = rootView.findViewById(R.id.add_photo);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -320,7 +335,10 @@ public class StashInfo extends Fragment {
                             @Override
                             public void run() {
                                 // this code will be executed after 15 seconds
-                                startDownloadIntentService(Constants.FETCH_PROJECT, stashType, stash.getId());
+                                if (stashType == Constants.STASH_TYPE_YARN)
+                                    startDownloadIntentService(Constants.FETCH_STASH_YARN, stashType, stash.getId());
+                                else
+                                    startDownloadIntentService(Constants.FETCH_STASH_FIBER, stashType, stash.getId());
                             }
                         }, 15000);
 
@@ -368,7 +386,9 @@ public class StashInfo extends Fragment {
 
         switch (stashType){
             case Constants.STASH_TYPE_YARN:
-                stashItems.add(POSITION_YARNSTASH_COMPANY, new CardData(getString(R.string.stash_yarn_company), stash.getYarn().getYarnCompany().getName(), "{fa-user}"));
+                String yarnCompany = stash.hasYarn() ? stash.getYarn().getYarnCompany().getName() : ""; // This may happen when the yarn is handspun.
+
+                stashItems.add(POSITION_YARNSTASH_COMPANY, new CardData(getString(R.string.stash_yarn_company), yarnCompany, "{fa-user}"));
                 stashItems.add(POSITION_YARNSTASH_COLORWAY, new CardData(getString(R.string.stash_colorway), stash.getColorwayName(), "{fa-comment}"));
                 stashItems.add(POSITION_YARNSTASH_COLOR_FAMILY, new CardData(getString(R.string.stash_color_family), stash.getColorFamilyName(), "{fa-cog}"));
                 stashItems.add(POSITION_YARNSTASH_STATUS, new CardData(getString(R.string.stash_status), stash.getStashStatus().getName(), "{fa-list-ol}"));
@@ -376,44 +396,58 @@ public class StashInfo extends Fragment {
                 stashItems.add(POSITION_YARNSTASH_LOCATION, new CardData(getString(R.string.stash_location), stash.getLocation(), "{fa-location-arrow}"));
                 stashItems.add(POSITION_YARNSTASH_WEIGHT, new CardData(getString(R.string.stash_weight_name), stash.getYarnWeight(), "{fa-balance-scale}"));
 
+
+
+                ArrayList<Pack> yarnPacks = stash.getYarnPacks();
+                // We can have three kinds of packs:
+                // 1. The Primary Pack. This gives us the complete information about the stashed yarn - including the total amount stashed.
+                // 2. The Remaining Pack. This pack will tell us how much yarn is left over after accounting for projects that use yarn in this stash.
+                // 3. Other Packs. These packs will tell us which projectIds use the stashed yarn, and possibly how much they use.
+
+
+                if (yarnPacks != null) {
+
+                    Pack primaryPack = null;
+                    Pack remainingPack = null;
+                    ArrayList<Pack> otherPacks = new ArrayList<>();
+
+                    for (Pack thisPack : yarnPacks) {
+                        if (thisPack.hasPrimaryPackId()) { // this is not the Primary Pack
+                            if (thisPack.hasProjectId()) { // this is an Other Pack
+                                otherPacks.add(thisPack);
+                            } else                          // this is a Remaining Pack
+                                remainingPack = thisPack;
+                        } else                               // this is the Primary Pack
+                            primaryPack = thisPack;
+                    }
+
+
+                    stashItems.add(new CardData(getString(R.string.stash_amount), primaryPack.getQuantityDescription(), "{fa-location-arrow}"));
+                    stashItems.add(new CardData(getString(R.string.stash_remaining), remainingPack.getQuantityDescription(), "{fa-location-arrow}"));
+
+                    for (Pack thisPack : otherPacks) {
+
+                        String packAmount = thisPack.getQuantityDescription()==null ? "" : thisPack.getQuantityDescription();
+
+                        stashItems.add(new CardData(getString(R.string.stash_project) + " ",
+                                getString(R.string.stash_project_used) + packAmount, "", thisPack.getProjectId()));
+                                startDownloadIntentService(Constants.FETCH_PROJECT, thisPack.getProjectId());
+                    }
+                }
+
                 break;
 
             case Constants.STASH_TYPE_FIBER:
 
-                stashItems.add(POSITION_FIBER_COMPANY_NAME, new CardData("Fiber Company :", stash.getFiberCompanyName(), "{fa-calendar}"));
-                stashItems.add(POSITION_FIBER_COLORWAY_NAME, new CardData("Colorway :", stash.getColorwayName(), "{fa-calendar}"));
-                stashItems.add(POSITION_FIBER_LOCATION, new CardData("Location :", stash.getLocation(), "{fa-calendar}"));
-                stashItems.add(POSITION_FIBER_STASH_STATUS, new CardData("Status :", stash.getStashStatus().getName(), "{fa-calendar}"));
+                stashItems.add(POSITION_FIBER_COMPANY_NAME, new CardData("Fiber Company :", stash.getFiberCompanyName(), "{fa-user}"));
+                stashItems.add(POSITION_FIBER_COLORWAY_NAME, new CardData("Colorway :", stash.getColorwayName(), "{fa-comment}"));
+                stashItems.add(POSITION_FIBER_LOCATION, new CardData("Location :", stash.getLocation(), "{fa-location-arrow}"));
+                stashItems.add(POSITION_FIBER_STASH_STATUS, new CardData("Status :", stash.getStashStatus().getName(), "{fa-list-ol}"));
                 //stashItems.add(POSITION_FIBER_STASH_COLOR_FAMILY, new CardData("Status :", stash.getLongName(), "{fa-calendar}"));
                 //stashItems.add(POSITION_FIBER_PURCHASED_AT, new CardData("Status :", stash.get, "{fa-calendar}"));
 
-
-                // Eventually we should show what projects are associated with a stash.
-                //ArrayList<FiberPack> packs = stash.getFiberPacks();
-
-                //for (FiberPack pack : packs){
-
-                  //  stashItems.add(new CardData("Yarn: ", yarnString, "{fa-bookmark}"));
-
-                //}
-
                 break;
-
         }
-
-
-
-
-        //for (int i = 0; i < a_packs.size(); i++) {
-          //  String yarnString = "";
-           // yarnString += a_packs.get(i).getYarnName() + "\nColorway: ";
-            //yarnString += a_packs.get(i).getColorway();
-
-//            if (a_packs.get(i).getQuantityDescription() != null)
-  //              yarnString += "\nAmount used: " + a_packs.get(i).getQuantityDescription();
-
-            //stashItems.add(new CardData("Yarn: ", yarnString, "{fa-bookmark}"));
-
     }
 
 
@@ -498,6 +532,16 @@ public class StashInfo extends Fragment {
         getActivity().startService(intent);
     }
 
+    // For Project Info
+    private void startDownloadIntentService(int type, int projectId){
+
+        Intent intent = new Intent(getActivity(), DownloadIntentService_.class);
+        intent.putExtra(Constants.RECEIVER, downloadIntentResultReceiver);
+        intent.putExtra(Constants.FETCH_TYPE, type);
+        intent.putExtra(Constants.PROJECT_ID, projectId);
+        getActivity().startService(intent);
+    }
+
     private class DownloadIntentResultReceiver extends ResultReceiver {
         private DownloadIntentResultReceiver(Handler handler) {
             super(handler);
@@ -557,13 +601,37 @@ public class StashInfo extends Fragment {
                             }
                         }
                         break;
+
+                    case Constants.FETCH_PROJECT:
+                        try{
+
+                            Project project;
+                            JSONObject jObject = new JSONObject(resultDataString);
+                            String s_project = jObject.get("project").toString();
+                            project = mapper.readValue(s_project, Project.class);
+
+                            for (int i = 0; i < stashItems.size(); i++){
+                                if (stashItems.get(i).getMainId() == project.getId()) {
+
+                                    CardData tempCard = stashItems.get(i);
+                                    tempCard.setImage(project.getPhotos().get(0).getSmallUrl());    // Get URL of first photo
+                                    tempCard.setTv_top(getString(R.string.stash_project) + project.getName());
+                                    stashItems.set(i, tempCard);
+
+                                    recyclerViewAdapter.updateItem(i, tempCard);
+                                }
+                            }
+
+                        } catch (Exception e){
+                            Log.d(TAG, e.toString());
+                        }
                 }
             }
             else{
                 String errorMessage = resultData.getString(Constants.RESULT_DATA_KEY);
                 if (errorMessage != null && !errorMessage.isEmpty()) {
 
-                    final Snackbar snackbar = Snackbar.make(rootView, errorMessage + " Your stash was not updated.", Snackbar.LENGTH_INDEFINITE);
+                    final Snackbar snackbar = Snackbar.make(rootView, errorMessage, Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction("OK", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -577,5 +645,38 @@ public class StashInfo extends Fragment {
 
         }
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // This is some bullshit right here!!!
+        // Why the fuck does the recyclerViewAdapter need to be recreated each time?
+        // If we don't recreate it, it doesn't die with any fragments we create after this one
+        // (Like Project Info fragment) -- it persists! It really should end when the
+        // fragment/activity lifecycle ends...
+        
+        recyclerViewAdapter = null;
+        recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(stashItems, getActivity());
+        recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener(){
+            @Override
+            public void onItemClick(int position, View v){
+                Log.i(TAG, " clicked on item at position: " + position);
+
+                if (stashItems.get(position).getMainId() != 0) {
+                    Intent intent = new Intent(getActivity(), ProjectActivity_.class);
+                    intent.putExtra(Constants.PROJECT_ID, stashItems.get(position).getMainId());
+                    startActivity(intent);
+                }
+
+                //buildDialog(position);
+            }
+        });
+
+        if (recyclerView!=null)
+            recyclerView.setAdapter(recyclerViewAdapter);
+
+    }
+
 
 }

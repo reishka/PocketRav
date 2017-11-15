@@ -1,13 +1,16 @@
 package com.whitewhiskerstudios.pocketrav.Adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
+import com.squareup.picasso.Picasso;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Utils.CardData;
 
@@ -23,8 +26,9 @@ public class RecyclerViewAdapterWithFontAwesome extends RecyclerView.Adapter<Rec
     private Context context;
     private static MyClickListener myClickListener;
 
-    public RecyclerViewAdapterWithFontAwesome(ArrayList<CardData> dl) {
+    public RecyclerViewAdapterWithFontAwesome(ArrayList<CardData> dl, Context context) {
         this.dataList = dl;
+        this.context = context;
     }
 
     @Override
@@ -35,18 +39,23 @@ public class RecyclerViewAdapterWithFontAwesome extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(DataViewHolder viewHolder, int i) {
         CardData cardData = dataList.get(i);
-        viewHolder.tv_top.setText(cardData.tv_top);
-        viewHolder.tv_bottom.setText(cardData.tv_bottom);
-        viewHolder.iconTextView.setText(cardData.image);
-    }
+        viewHolder.tv_top.setText(cardData.getTv_top());
+        viewHolder.tv_bottom.setText(cardData.getTv_bottom());
+
+        if (!(cardData.getImage() == null && !cardData.getImage().isEmpty()))
+        {
+            if (cardData.getImage().contains("http"))
+                Picasso.with(context).load(cardData.getImage()).into(viewHolder.imageView);
+            else
+                viewHolder.iconTextView.setText(cardData.getImage());
+    }}
 
     @Override
     public DataViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
+                from(context).
                 inflate(R.layout.cardview_with_icontextview, viewGroup, false);
 
-        context = viewGroup.getContext();
         return new DataViewHolder(itemView);
     }
 
@@ -55,12 +64,15 @@ public class RecyclerViewAdapterWithFontAwesome extends RecyclerView.Adapter<Rec
         protected TextView tv_top;
         protected TextView tv_bottom;
         protected IconTextView iconTextView;
+        protected ImageView imageView;
 
         public DataViewHolder(View v){
             super(v);
             tv_top = (TextView) v.findViewById(R.id.tv_top);
             tv_bottom = (TextView) v.findViewById(R.id.tv_bottom);
             iconTextView = (IconTextView) v.findViewById(R.id.iconTextView);
+            imageView = (ImageView) v.findViewById(R.id.photo);
+
             v.setOnClickListener(this);
         }
         @Override
@@ -84,4 +96,11 @@ public class RecyclerViewAdapterWithFontAwesome extends RecyclerView.Adapter<Rec
             notifyDataSetChanged();
         }
     }
+
+    public void updateItem(int i, CardData cardData){
+        dataList.remove(i);
+        dataList.add(i, cardData);
+        notifyDataSetChanged();
+    }
+
 }

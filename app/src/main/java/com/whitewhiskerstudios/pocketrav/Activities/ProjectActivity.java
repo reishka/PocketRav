@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whitewhiskerstudios.pocketrav.API.Models.Photo;
 import com.whitewhiskerstudios.pocketrav.API.Models.Project;
 import com.whitewhiskerstudios.pocketrav.Adapters.ViewPagerAdapter;
+import com.whitewhiskerstudios.pocketrav.Fragments.ProjectInfo;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectInfo_;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectNotes;
 import com.whitewhiskerstudios.pocketrav.Fragments.ProjectPattern;
@@ -248,7 +249,21 @@ public class ProjectActivity extends AppCompatActivity implements BaseSliderView
 
     @Override
     public void onBackPressed(){
+
+
+            int count = getFragmentManager().getBackStackEntryCount();
+
+            if (count == 0) {
+                super.onBackPressed();
+                //additional code
+            } else {
+                getFragmentManager().popBackStack();
+            }
+
+            projectInfoFragment.setRecyclerViewAdapter(null);
+
         finish();
     }
-
 }
+
+

@@ -150,8 +150,8 @@ public class CardViewStash extends CardView{
                             public void onItemClick(int position, View v) {
                                  Log.i(TAG, " clicked on item at position: " + position);
 
-                                int stashId = cardInfoArrayList.get(position).id;
-                                int stashType = cardInfoArrayList.get(position).stashType;
+                                int stashId = cardInfoArrayList.get(position).getMainId();
+                                int stashType = cardInfoArrayList.get(position).getStashType();
 
                                 Intent intent = new Intent(getActivity(), StashActivity_.class);
                                 intent.putExtra(Constants.STASH_ID, stashId);
@@ -170,4 +170,5 @@ public class CardViewStash extends CardView{
             }
         }
     }
+
 }

@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="4dp"
+    >
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/card_view"
         android:backgroundTint="#50ffffff"
         app:cardElevation="0dp"
         >
 
-
-    <RelativeLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            >
 
     <com.joanzapata.iconify.widget.IconTextView
         android:id="@+id/iconTextView"
@@ -37,6 +35,15 @@
         android:textSize="40sp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:id="@+id/photo"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="16dp"
+                />
 
 
         <TextView

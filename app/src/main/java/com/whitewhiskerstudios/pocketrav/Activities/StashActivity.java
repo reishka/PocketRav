@@ -44,7 +44,7 @@ public class StashActivity extends AppCompatActivity implements BaseSliderView.O
     PocketRavPrefs_ prefs;
 
     private DownloadIntentResultReceiver downloadIntentResultReceiver;
-    private static final String TAG = "ProjectActivity";
+    private static final String TAG = "Stash Activity";
     private SliderLayout slider;
     private ViewPager viewPager;
     private TabLayout tabLayout;

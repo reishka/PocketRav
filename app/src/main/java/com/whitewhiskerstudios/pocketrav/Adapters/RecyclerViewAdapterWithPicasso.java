@@ -37,11 +37,11 @@ public class RecyclerViewAdapterWithPicasso extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(DataViewHolder viewHolder, int i) {
         CardData cardData = dataList.get(i);
-        viewHolder.tv_top.setText(cardData.tv_top);
-        viewHolder.tv_bottom.setText(cardData.tv_bottom);
+        viewHolder.tv_top.setText(cardData.getTv_top());
+        viewHolder.tv_bottom.setText(cardData.getTv_bottom());
 
-        if (!cardData.image.equals(""))
-            Picasso.with(context).load(cardData.image).into(viewHolder.imageView);
+        if (!cardData.getImage().equals(""))
+            Picasso.with(context).load(cardData.getImage()).into(viewHolder.imageView);
         else
             Picasso.with(context).load(R.drawable.placeholder200).into(viewHolder.imageView);
 
