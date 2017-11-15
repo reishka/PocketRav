@@ -53,7 +53,7 @@ public class UploadIntentService extends RavIntentService{
 
     private String responseBody = null;
     private int responseCode = -1;
-    int postType = -1;
+    private int postType = -1;
 
     public final static boolean DEBUG = false;
 
@@ -100,6 +100,7 @@ public class UploadIntentService extends RavIntentService{
         String dataString = "";
         String uploadToken = "";
         String image = "";
+        int imageId = -1;
 
         switch (postType) {
 
@@ -147,11 +148,28 @@ public class UploadIntentService extends RavIntentService{
 
                 //dataString = intent.getStringExtra(Constants.POST_JSON_STRING);
                 projectId =  intent.getIntExtra(Constants.PROJECT_ID, -1);
-                int imageId = intent.getIntExtra(Constants.PHOTO_ID, -1);
+                imageId = intent.getIntExtra(Constants.PHOTO_ID, -1);
 
                 if (projectId != -1 && imageId != -1){
                     apiCall = RavelryAPI.instance().getCreatePhoto(username, projectId, imageId);
                 }
+                break;
+
+            case Constants.POST_CREATE_PHOTO_STASH:
+
+                stashId =  intent.getIntExtra(Constants.STASH_ID, -1);
+                imageId = intent.getIntExtra(Constants.PHOTO_ID, -1);
+                int stashType = intent.getIntExtra(Constants.STASH_TYPE, -1);
+
+
+                if (stashId != -1 && imageId != -1 && stashType != -1){
+
+                    if (stashType == Constants.STASH_TYPE_YARN)
+                        apiCall = RavelryAPI.instance().getCreatePhotoYarn(username, stashId, imageId);
+                    else
+                        apiCall = RavelryAPI.instance().getCreatePhotoFiber(username, stashId, imageId);
+                }
+                break;
 
             default:
                 break;

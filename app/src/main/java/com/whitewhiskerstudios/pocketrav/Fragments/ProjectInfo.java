@@ -80,7 +80,7 @@ public class ProjectInfo extends Fragment{
     private RatingBar ratingBar;
     private DiscreteSeekBar seekBar;
     private RecyclerView recyclerView;
-    RecyclerViewAdapterWithFontAwesome recyclerViewAdapter;
+    private RecyclerViewAdapterWithFontAwesome recyclerViewAdapter;
     ArrayList<CardData> projectItems;
 
     ArrayList<NeedleSizes> knittingNeedleSizes = new ArrayList<>();
@@ -104,6 +104,10 @@ public class ProjectInfo extends Fragment{
     private static final int POSITION_EPI_PPI = 7;
 
     private static final int CAMERA_LOAD_IMAGE = 1000;
+
+    public void setRecyclerViewAdapter(Object object){
+        this.recyclerViewAdapter = (RecyclerViewAdapterWithFontAwesome) object;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -178,7 +182,7 @@ public class ProjectInfo extends Fragment{
 
                     recyclerView.setLayoutManager(gridLayoutManager);
 
-                    recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(projectItems);
+                    recyclerViewAdapter = new RecyclerViewAdapterWithFontAwesome(projectItems, getActivity());
                     recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapterWithFontAwesome.MyClickListener() {
                         @Override
                         public void onItemClick(int position, View v) {
@@ -242,10 +246,10 @@ public class ProjectInfo extends Fragment{
         stash_bar.setVisibility(View.GONE);
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
-        LinearLayout recyclerViewParent = (LinearLayout)recyclerView.getParent();
+        LinearLayout recyclerViewParent = (LinearLayout) recyclerView.getParent();
         recyclerViewParent.setBackgroundColor(Color.TRANSPARENT); // RecyclerView has a gradient, but our activity also has a gradient, so remove the rv gradient
 
-        Button cameraButton = rootView.findViewById(R.id.add_photo);
+        Button cameraButton = rootView.findViewById(R.id.add_yarn_photo);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -786,10 +790,10 @@ public class ProjectInfo extends Fragment{
                         new Timer().schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                // this code will be executed after 15 seconds
+                                // this code will be executed after 7 seconds
                                 startDownloadIntentService(Constants.FETCH_PROJECT, project.getId());
                             }
-                        }, 15000);
+                        }, 7000);
                 }
             }
             else{
@@ -1063,4 +1067,27 @@ public class ProjectInfo extends Fragment{
         }
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        recyclerViewAdapter = null;
+        recyclerView = null;
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        recyclerViewAdapter = null;
+        recyclerView = null;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        recyclerViewAdapter = null;
+        recyclerView = null;
+    }
 }

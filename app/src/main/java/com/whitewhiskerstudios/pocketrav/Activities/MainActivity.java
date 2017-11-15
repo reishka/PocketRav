@@ -21,12 +21,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.squareup.picasso.Picasso;
+import com.whitewhiskerstudios.pocketrav.API.Models.NeedleSizes;
 import com.whitewhiskerstudios.pocketrav.API.Models.User;
 import com.whitewhiskerstudios.pocketrav.Fragments.CardViewProject;
 import com.whitewhiskerstudios.pocketrav.Fragments.CardViewStash;
@@ -41,6 +45,8 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.json.JSONObject;
 
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 @EActivity
@@ -51,9 +57,9 @@ public class MainActivity extends AppCompatActivity
     PocketRavPrefs_ prefs;
 
     IconDrawable icon_projects,         icon_handspun,          icon_stash,             icon_queue,
-                icon_favorites,         icon_friends,           icon_groups,            icon_tools,
-                icon_library,           icon_messages,          icon_contributions,     icon_purchases,
-                icon_search_pattern,    icon_search_projects,   icon_search_yarn        = null;
+            icon_favorites,         icon_friends,           icon_groups,            icon_tools,
+            icon_library,           icon_messages,          icon_contributions,     icon_purchases,
+            icon_search_pattern,    icon_search_projects,   icon_search_yarn        = null;
 
     NavigationView navigationView;
 
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 
         String json = prefs.accessToken().get();
 
-        if (json == null || json == "")
+        if (json == null || json.isEmpty())
             getAuthToken();
         else {
             setupUser();
@@ -170,7 +176,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frame_layout, cardViewProjectFragment);
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.addToBackStack(null);
 
             fragmentTransaction.commit();
 
@@ -187,7 +193,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frame_layout, cardViewStashFragment);
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.addToBackStack(null);
 
             fragmentTransaction.commit();
 
@@ -250,7 +256,7 @@ public class MainActivity extends AppCompatActivity
 
         String json = prefs.accessToken().get();
 
-        if (json == null || json == ""){
+        if (json == null || json.isEmpty()){
             Intent intent = new Intent(this, AccessTokenActivity_.class);
             startActivityForResult(intent, Constants.AUTH_INTENT);
         }
@@ -271,22 +277,41 @@ public class MainActivity extends AppCompatActivity
 
     private void setupUser(){
 
-        if (user == null)
-            startDownloadIntentService(Constants.FETCH_USER);
-        else {
+        if (user != null)       // We already have a user - downloaded from rav
+            loadUserData();
+        else {                  // try to load from prefs
 
-            // Set up the user info in the menu header
-            CircleImageView userImage = (CircleImageView) findViewById(R.id.nav_header_image);
-            TextView username = (TextView) findViewById(R.id.nav_header_main_username);
-            TextView name = (TextView) findViewById(R.id.nav_header_main_name);
+            ObjectMapper mapper = new ObjectMapper();
+            String userJson = prefs.user().get();
 
-            if (user.getSmallPhotoURL() != null)
-                Picasso.with(this).load(user.getSmallPhotoURL()).into(userImage);
-            if (user.getUsername() != null)
-                username.setText(user.getUsername());
-            if (user.getFirstName() != null)
-                name.setText(user.getFirstName());
+            if (userJson == null || userJson.isEmpty()){            // Don't have user & don't have a user in preferences -> download user & try again
+                startDownloadIntentService(Constants.FETCH_USER);
+            } else {
+                try {
+                    user = mapper.readValue(userJson, User.class);
+                    loadUserData();
+
+                } catch (Exception e){
+                    Log.d(TAG, "Could not load user data");  // Couldn't load data from prefs -> download user & try again
+                    startDownloadIntentService(Constants.FETCH_USER);
+                }
+            }
         }
+    }
+
+    private void loadUserData(){
+
+        // Set up the user info in the menu header
+        CircleImageView userImage = (CircleImageView) findViewById(R.id.nav_header_image);
+        TextView username = (TextView) findViewById(R.id.nav_header_main_username);
+        TextView name = (TextView) findViewById(R.id.nav_header_main_name);
+
+        if (user.getSmallPhotoURL() != null)
+            Picasso.with(this).load(user.getSmallPhotoURL()).into(userImage);
+        if (user.getUsername() != null)
+            username.setText(user.getUsername());
+        if (user.getFirstName() != null)
+            name.setText(user.getFirstName());
     }
 
     private void startDownloadIntentService(int type){
@@ -319,8 +344,14 @@ public class MainActivity extends AppCompatActivity
                             String s_user = jObject.get("user").toString();
                             user = mapper.readValue(s_user, User.class);
 
-                            if (user != null)
+                            if (user != null) {
+
+                                Gson gson = new Gson();
+                                String jsonUser = gson.toJson(user);
+                                prefs.user().put(jsonUser);
+
                                 setupUser();
+                            }
 
                         }catch (Exception e) {
 

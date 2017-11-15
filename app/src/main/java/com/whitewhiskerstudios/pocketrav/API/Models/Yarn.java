@@ -73,6 +73,8 @@ public class Yarn implements Serializable{
     //    return minHookSize;
     //}
 
+    public boolean hasYarnCompany() { return !(yarnCompany == null); }
+
     public String getName() {
         return name;
     }

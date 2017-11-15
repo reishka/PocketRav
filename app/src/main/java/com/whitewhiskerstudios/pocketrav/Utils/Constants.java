@@ -59,6 +59,7 @@ public class Constants {
     public static final int STASH_TYPE_FIBER = 101;
     public static final int STASH_TYPE_YARN = 102;
     public static final int POST_STASH = 13;
+    public static final int POST_CREATE_PHOTO_STASH = 18;
 
     // Upload
     public static final String UPLOAD_ID = "UPLOAD_ID";

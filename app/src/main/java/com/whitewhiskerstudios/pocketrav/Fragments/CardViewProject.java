@@ -104,7 +104,7 @@ public class CardViewProject extends CardView {
                                     public void onItemClick(int position, View v){
                                         //Log.i(TAG, " clicked on item at position: " + position);
 
-                                        int projectId = cardInfoArrayList.get(position).id;
+                                        int projectId = cardInfoArrayList.get(position).getMainId();
 
                                         Intent intent = new Intent(getActivity(), ProjectActivity_.class);
                                         intent.putExtra(Constants.PROJECT_ID, projectId);

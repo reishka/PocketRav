@@ -67,9 +67,15 @@ public class Pack implements Serializable{
         return personalName;
     }
 
+    // When this comes in as a null value, 0 becomes the value
+    public boolean hasPrimaryPackId() { return !(primaryPackId== 0);}
+
     public int getPrimaryPackId() {
         return primaryPackId;
     }
+
+    // When this comes in as a null value, 0 becomes the value
+    public boolean hasProjectId() {return !(projectId == 0); }
 
     public int getProjectId() {
         return projectId;

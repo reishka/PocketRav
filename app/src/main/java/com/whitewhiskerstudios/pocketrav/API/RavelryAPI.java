@@ -37,8 +37,6 @@ public class RavelryAPI extends DefaultApi10a {
 
     // PATTERNS
 
-    // YARNS
-
     // NEEDLES
     private static final String NEEDLE_SIZES_KNITTING = "/needles/sizes.json?craft=knitting";
     private static final String NEEDLE_SIZES_CROCHET = "/needles/sizes.json?craft=crochet";
@@ -49,6 +47,8 @@ public class RavelryAPI extends DefaultApi10a {
     private static final String STASH_LIST_SORTED = STASH_LIST + "?sort=%s";
     private static final String STASH_YARN = "/people/%s/stash/%s.json";
     private static final String STASH_FIBER = "/people/%s/fiber/%s.json";
+    private static final String PHOTO_CREATE_YARN = "/people/%s/stash/%s/create_photo.json?image_id=%s";
+    private static final String PHOTO_CREATE_FIBER = "/people/%s/fiber/%s/create_photo.json?image_id=%s";
 
     // UPLOAD
     private static final String UPLOAD_PHOTO_TOKEN = "/upload/request_token.json";
@@ -106,8 +106,11 @@ public class RavelryAPI extends DefaultApi10a {
     public String getStashList(String username){ return String.format(RAV_API_URL + STASH_LIST, username); }
     public String getStashList(String username, String sort){ return String.format(RAV_API_URL + STASH_LIST_SORTED, username, sort); }
     public String getStashUnifiedList(String username){ return String.format(RAV_API_URL + STASH_UNIFIED_LIST, username); }
-    public String getStashYarn(String username, int stashId) { return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
-    public String getStashFiber(String username, int stashId) { return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
+    public String getStashYarn(String username, int stashId) { Log.d(TAG, String.valueOf(stashId)); return String.format(RAV_API_URL + STASH_YARN, username, stashId); }
+    public String getStashFiber(String username, int stashId) { Log.d(TAG, String.valueOf(stashId)); return String.format(RAV_API_URL + STASH_FIBER, username, stashId); }
+    public String getCreatePhotoYarn(String username, int stashId, int imageId) { return String.format(RAV_API_URL + PHOTO_CREATE_YARN, username, stashId, imageId); }
+    public String getCreatePhotoFiber(String username, int stashId, int imageId){ return String.format(RAV_API_URL + PHOTO_CREATE_FIBER, username, stashId, imageId); }
+
 
     // UPLOAD
     public String getUploadToken() { return RAV_API_URL + UPLOAD_PHOTO_TOKEN; }

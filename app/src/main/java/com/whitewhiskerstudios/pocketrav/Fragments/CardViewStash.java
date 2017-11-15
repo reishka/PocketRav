@@ -14,9 +14,8 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whitewhiskerstudios.pocketrav.API.Models.FiberStash;
+import com.whitewhiskerstudios.pocketrav.API.Models.Stash;
 import com.whitewhiskerstudios.pocketrav.API.Models.UnifiedStash;
-import com.whitewhiskerstudios.pocketrav.API.Models.YarnStash;
 import com.whitewhiskerstudios.pocketrav.Activities.StashActivity_;
 import com.whitewhiskerstudios.pocketrav.Adapters.RecyclerViewAdapterWithPicasso;
 import com.whitewhiskerstudios.pocketrav.R;
@@ -33,8 +32,7 @@ import java.util.ArrayList;
  */
 
 public class CardViewStash extends CardView{
-    private ArrayList<YarnStash> yarnStashList;
-    private ArrayList<FiberStash> fiberStashList;
+    private ArrayList<Stash> stashList;
     private ArrayList<UnifiedStash> unifiedStashList;
     private DownloadIntentResultReceiver downloadIntentResultReceiver;
     private final String TAG = "CardViewStash";
@@ -45,8 +43,7 @@ public class CardViewStash extends CardView{
 
         downloadIntentResultReceiver = new DownloadIntentResultReceiver(new Handler());
 
-        yarnStashList = null;
-        fiberStashList = null;
+        stashList = null;
         unifiedStashList = null;
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Stash");
@@ -100,8 +97,7 @@ public class CardViewStash extends CardView{
         protected void onReceiveResult(int resultCode, Bundle resultData) {
 
             isDownloading(false);
-            yarnStashList = new ArrayList<>();
-            fiberStashList = new ArrayList<>();
+            stashList = new ArrayList<>();
 
             if (resultCode == Constants.SUCCESS_RESULT) {
                 try {
@@ -118,60 +114,33 @@ public class CardViewStash extends CardView{
                         final ArrayList<CardData> cardInfoArrayList = new ArrayList<>();
 
                         for (UnifiedStash stashItem : unifiedStashList){
-                            if (stashItem.isYarn())
-                                yarnStashList.add(stashItem.getYarnStash());
-                            else
-                                fiberStashList.add(stashItem.getFiberStash());
+                                stashList.add(stashItem.getStash());
                         }
 
-
-                        for (int i = 0; i < yarnStashList.size() - 1; i++) {
+                        for (int i = 0; i < stashList.size() - 1; i++) {
 
                             String name = "";
                             String colorwayName = "";
                             String photoUrl = "";
                             int id = -1;
+                            int stashType = -1;
 
-                            if (yarnStashList.get(i).hasColorwayName()) {
-                                colorwayName = yarnStashList.get(i).getColorwayName();
-                            } else if (yarnStashList.get(i).hasYarn()) {
-                                colorwayName = yarnStashList.get(i).getYarn().getYarnCompany().getName() + " - " + yarnStashList.get(i).getYarn().getName();
-                            } else {
-                                colorwayName = yarnStashList.get(i).getName();
-                            }
-
-                            if (yarnStashList.get(i).hasYarn())
-                                name = yarnStashList.get(i).getYarn().getYarnCompany().getName() + " - " + yarnStashList.get(i).getYarn().getName();
-                            else
-                                name = yarnStashList.get(i).getName();
-
-                            if (yarnStashList.get(i).hasFirstPhoto())
-                                photoUrl = yarnStashList.get(i).getFirstPhoto().getSmallUrl();
-
-                            id = yarnStashList.get(i).getId();
-
-                            cardInfoArrayList.add(new CardData(colorwayName, name, photoUrl, id, Constants.STASH_TYPE_YARN));
-                        }
-
-
-                        for (int i = 0; i < fiberStashList.size() - 1; i++) {
-
-                            String name = "";
-                            String colorwayName = "";
-                            String photoUrl = "";
-                            int id = -1;
-
-                            if (fiberStashList.get(i).hasColorwayName()) {
-                                colorwayName = fiberStashList.get(i).getColorwayName();
+                            if (stashList.get(i).hasColorwayName()) {
+                                colorwayName = stashList.get(i).getColorwayName();
                             } else
-                                colorwayName = fiberStashList.get(i).getName();
+                                colorwayName = stashList.get(i).getName();
 
-                            if (fiberStashList.get(i).hasFirstPhoto())
-                                photoUrl = fiberStashList.get(i).getFirstPhoto().getSmallUrl();
+                            if (stashList.get(i).hasFirstPhoto())
+                                photoUrl = stashList.get(i).getFirstPhoto().getSmallUrl();
 
-                            id = fiberStashList.get(i).getId();
+                            id = stashList.get(i).getId();
 
-                            cardInfoArrayList.add(new CardData(colorwayName, name, photoUrl, id, Constants.STASH_TYPE_FIBER));
+                            if (stashList.get(i).isYarn() || stashList.get(i).isHandspun())
+                                stashType = Constants.STASH_TYPE_YARN;
+                            else
+                                stashType = Constants.STASH_TYPE_FIBER;
+
+                            cardInfoArrayList.add(new CardData(colorwayName, name, photoUrl, id, stashType));
                         }
 
 
@@ -181,8 +150,8 @@ public class CardViewStash extends CardView{
                             public void onItemClick(int position, View v) {
                                  Log.i(TAG, " clicked on item at position: " + position);
 
-                                int stashId = cardInfoArrayList.get(position).id;
-                                int stashType = cardInfoArrayList.get(position).stashType;
+                                int stashId = cardInfoArrayList.get(position).getMainId();
+                                int stashType = cardInfoArrayList.get(position).getStashType();
 
                                 Intent intent = new Intent(getActivity(), StashActivity_.class);
                                 intent.putExtra(Constants.STASH_ID, stashId);
@@ -201,4 +170,5 @@ public class CardViewStash extends CardView{
             }
         }
     }
+
 }

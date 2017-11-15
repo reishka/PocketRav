@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -20,9 +19,7 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.whitewhiskerstudios.pocketrav.API.Models.FiberStash;
-import com.whitewhiskerstudios.pocketrav.API.Models.Project;
-import com.whitewhiskerstudios.pocketrav.API.Models.YarnStash;
+import com.whitewhiskerstudios.pocketrav.API.Models.Stash;
 import com.whitewhiskerstudios.pocketrav.R;
 import com.whitewhiskerstudios.pocketrav.Services.UploadIntentService_;
 import com.whitewhiskerstudios.pocketrav.Utils.Constants;
@@ -199,15 +196,16 @@ public class StashNotes extends Fragment { View rootView;
 
                 switch (type) {
                     case Constants.STASH_TYPE_YARN:
+                    case Constants.STASH_TYPE_FIBER:
 
                         try {
                             JSONObject jObject = new JSONObject(resultDataString);
                             String s_project = jObject.get("stash").toString();
-                            YarnStash yarnStash = mapper.readValue(s_project, YarnStash.class);
+                            Stash stash = mapper.readValue(s_project, Stash.class);
 
-                            if (yarnStash != null) {
+                            if (stash != null) {
 
-                                notes = yarnStash.getNotes();
+                                notes = stash.getNotes();
                                 if (notes.equals("") || notes == null) {
                                     notes = EMPTY_NOTES;
                                 }
@@ -228,35 +226,7 @@ public class StashNotes extends Fragment { View rootView;
 
                         break;
 
-                    case Constants.STASH_TYPE_FIBER:
 
-                        try {
-                            JSONObject jObject = new JSONObject(resultDataString);
-                            String s_project = jObject.get("fiber_stash").toString();
-                            FiberStash fiberStash = mapper.readValue(s_project, FiberStash.class);
-
-                            if (fiberStash != null) {
-
-                                notes = fiberStash.getNotes();
-                                if (notes.equals("") || notes == null) {
-                                    notes = EMPTY_NOTES;
-                                }
-
-                                tv_notes.setText(notes);
-
-                                Snackbar.make(rootView, "Notes updated successfully.", Snackbar.LENGTH_SHORT)
-                                        .setAction("Action", null).show();
-                            } else {
-                                Snackbar.make(rootView, "Whoops, something went wrong somewhere. We couldn't update your notes.", Snackbar.LENGTH_SHORT)
-                                        .setAction("Action", null).show();
-                            }
-
-                        }catch (Exception e) {
-
-                            Log.e(TAG, e.toString());
-                        }
-
-                        break;
                 }
             }
         }
