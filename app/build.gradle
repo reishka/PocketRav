@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
@@ -13,6 +17,14 @@ android {
     }
     android {
         useLibrary 'org.apache.http.legacy'
+
+        sourceSets{
+            main.java.srcDirs += 'src/main/kotlin'
+        }
+    }
+
+    kapt {
+        correctErrorTypes = true
     }
 
     buildTypes {
@@ -48,8 +60,11 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'      // Font Awesome Icons
 
-    annotationProcessor "org.androidannotations:androidannotations:4.3.1"   // Android Annotations
-    compile 'org.androidannotations:androidannotations-api:4.3.1'           // Android Annotations
+    kapt "org.androidannotations:androidannotations:4.3.1"
+    compile "org.androidannotations:androidannotations-api:4.3.1"
+
+    //annotationProcessor "org.androidannotations:androidannotations:4.3.1"   // Android Annotations
+    //compile 'org.androidannotations:androidannotations-api:4.3.1'           // Android Annotations
 
     compile 'com.github.scribejava:scribejava-apis:4.1.1'               // Scribe for OAuth
     compile 'com.google.code.gson:gson:2.7'                             // GSON for serializing objects
@@ -68,7 +83,13 @@ dependencies {
     compile 'org.adw.library:discrete-seekbar:1.0.1'    // Seek Bar Slider
 
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'    // Multipart for image uploads
-    compile('org.apache.httpcomponents:httpmime:4.3.6') { exclude module: 'httpclient' }            // Multipart for image uploads
+    compile('org.apache.httpcomponents:httpmime:4.3.6') { exclude module: 'httpclient' }
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Multipart for image uploads
 
 
+
+}
+repositories {
+    mavenCentral()
 }
