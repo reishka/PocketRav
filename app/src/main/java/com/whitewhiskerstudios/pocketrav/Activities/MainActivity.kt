@@ -217,17 +217,11 @@ open class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     private fun setupUser() {
 
-        if (user != null)
-        // We already have a user - downloaded from rav
+        if (user != null) {
+            // We already have a user - downloaded previously from rav
             loadUserData()
-        else {                  // try to load from prefs
-
-            val json:String? = prefs.accessToken().get()
-            if ( json == null || json.isEmpty() )
-                getAuthToken()
-            else {
-                setupUser()
-            }
+        }
+        else { // try to load from prefs
 
             val userJson:String? = prefs.user().get()
 
@@ -256,7 +250,7 @@ open class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         nav_header_main_name.text = user?.firstName
     }
 
-    private fun startDownloadIntentService(type: Int) {
+    fun startDownloadIntentService(type: Int) {
 
         val intent = Intent(this, DownloadIntentService_::class.java)
         intent.putExtra(Constants.RECEIVER, downloadIntentResultReceiver)
